@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nectar AI: Programa Beta Exclusivo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          nectar: '#FEA81F',
+          'nectar-dark': '#E5920A',
+          dark: '#23252C',
+          'dark-mid': '#2C2F38',
+          'dark-soft': '#353840',
+          light: '#F3F3F4',
+        },
+        fontFamily: {
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+        },
+        borderRadius: {
+          '4xl': '2rem',
+          '5xl': '2.5rem',
+        },
+        animation: {
+          'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          'float': 'float 6s ease-in-out infinite',
+        },
+        keyframes: {
+          float: {
+            '0%, 100%': { transform: 'translateY(0px)' },
+            '50%': { transform: 'translateY(-8px)' },
+          }
+        }
+      }
+    }
+  }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  * { -webkit-font-smoothing: antialiased; }
+  .tracking-tightest { letter-spacing: -0.04em; }
+  .gradient-text {
+    background: linear-gradient(135deg, #FEA81F 0%, #FFD166 60%, #FEA81F 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .glow-nectar { box-shadow: 0 0 80px rgba(254,168,31,0.15); }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .delay-1 { transition-delay: 100ms; }
+  .delay-2 { transition-delay: 200ms; }
+  .delay-3 { transition-delay: 300ms; }
+  .delay-4 { transition-delay: 400ms; }
+
+  /* Chat messages */
+  .chat-user { background: #FEA81F; color: #23252C; border-radius: 1rem 1rem 0.25rem 1rem; }
+  .chat-ai   { background: #353840; color: #F3F3F4; border-radius: 1rem 1rem 1rem 0.25rem; border: 1px solid rgba(243,243,244,0.07); }
+
+  /* Slot pip animation */
+  .slot-fill { animation: slotIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+  @keyframes slotIn { from { opacity:0; transform:scale(0); } to { opacity:1; transform:scale(1); } }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #23252C; }
+  ::-webkit-scrollbar-thumb { background: #353840; border-radius: 3px; }
+
+  .btn-nectar { transition: all 0.18s cubic-bezier(0.22,1,0.36,1); }
+  .btn-nectar:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(254,168,31,0.4); }
+  .feature-card { transition: all 0.32s cubic-bezier(0.22,1,0.36,1); }
+  .feature-card:hover { transform: translateY(-4px); }
+
+  /* Pipeline module animations */
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes barGrow {
+    from { width: 0 !important; }
+    to   { /* final width set inline */ }
+  }
+  @keyframes typingDot {
+    0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-3px); }
+  }
+</style>
+</head>
+
+<body class="min-h-screen bg-[#1A1C22] flex items-start justify-center p-0 lg:p-6 font-sans text-light">
+
+<!-- ════════════════════════════════════════
+     MAIN CONTAINER (design system pattern)
+═════════════════════════════════════════ -->
+<main class="w-full max-w-[1400px] bg-dark rounded-none lg:rounded-5xl shadow-2xl relative flex flex-col" style="overflow:clip;">
+
+  <!-- ── NAVBAR ─────────────────────────── -->
+  <header id="navbar" class="flex items-center justify-between px-6 lg:px-12 py-6 sticky top-0 z-50 transition-all duration-300" style="background: rgba(35,37,44,0.0);">
+    <!-- Logo -->
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 bg-nectar rounded-xl flex items-center justify-center shadow-lg">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M13 2L4.09 12.96H11L10 22L19.91 11.04H13L13 2Z" fill="#23252C"/>
+        </svg>
+      </div>
+      <span class="text-base font-bold text-[#F3F3F4] tracking-tight" id="navbarLogoText">Nectar <span class="text-nectar">AI</span></span>
+      <span class="text-[0.6rem] font-bold uppercase tracking-widest bg-nectar text-dark px-2.5 py-1 rounded-full">Beta</span>
+    </div>
+    <!-- CTA -->
+    <a href="#form" class="btn-nectar hidden sm:flex items-center gap-2 bg-nectar text-dark text-[0.7rem] font-bold uppercase tracking-widest px-5 py-2.5 rounded-full shadow-lg shadow-nectar/20">
+      Garantir vaga
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </header>
+
+  <!-- ── CINEMATIC SCROLL — AI PIPELINE ── -->
+  <section id="cin-section" style="background:#0D0E11; height:300vh; position:relative;">
+    <div id="cin-sticky" style="position:sticky; top:0; height:100vh; overflow:hidden;">
+
+      <!-- Ambient glow base -->
+      <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 50% 80%,rgba(254,168,31,0.07) 0%,transparent 70%);"></div>
+      <!-- AI activation glow pulse -->
+      <div id="cin-glow-pulse" style="position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse 55% 40% at 50% 50%,rgba(254,168,31,0.13) 0%,transparent 60%);"></div>
+
+      <!-- ① TITLE SCREEN -->
+      <div id="cin-title" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;text-align:center;padding:2rem 1.5rem;will-change:opacity,transform;opacity:1;">
+        <div style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.58rem;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:rgba(254,168,31,0.8);background:rgba(254,168,31,0.08);border:1px solid rgba(254,168,31,0.2);padding:0.45rem 1rem;border-radius:999px;margin-bottom:2rem;">
+          <span style="width:5px;height:5px;border-radius:50%;background:#FEA81F;display:inline-block;"></span>
+          Nectar AI · Pipeline Intelligence
+        </div>
+        <h2 style="font-size:clamp(3rem,8vw,6.5rem);font-weight:900;letter-spacing:-0.04em;color:#F3F3F4;line-height:0.93;margin-bottom:1.5rem;">
+          Seu pipeline.<br/>
+          <span style="background:linear-gradient(135deg,#FEA81F 0%,#FFD166 50%,#FEA81F 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Reinventado.</span>
+        </h2>
+        <p style="color:rgba(243,243,244,0.38);font-size:0.95rem;margin-bottom:3.5rem;max-width:380px;line-height:1.55;">Veja a inteligência artificial trabalhando em tempo real dentro do seu CRM</p>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+          <span style="font-size:0.52rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:rgba(243,243,244,0.18);">role para ver</span>
+          <svg width="16" height="26" viewBox="0 0 16 26" fill="none">
+            <rect x="0.75" y="0.75" width="14.5" height="24.5" rx="7.25" stroke="rgba(243,243,244,0.14)" stroke-width="1.5"/>
+            <rect x="6.5" y="5" width="3" height="6" rx="1.5" fill="rgba(243,243,244,0.28)"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ② PIPELINE BOARD (slides down from above) -->
+      <div id="cin-board" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;padding:4.5rem 1rem 6.5rem;will-change:opacity,transform;opacity:0;transform:translateY(-60px);">
+
+        <div style="margin-bottom:0.6rem;display:flex;align-items:center;gap:0.75rem;">
+          <span style="font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;color:rgba(243,243,244,0.3);">Pipeline · Q2 2025</span>
+          <span style="width:3px;height:3px;border-radius:50%;background:rgba(243,243,244,0.18);display:inline-block;"></span>
+          <span style="font-size:0.5rem;font-weight:500;color:rgba(243,243,244,0.25);">12 oportunidades · R$ 287.400</span>
+        </div>
+
+        <!-- CRM frame -->
+        <div style="width:100%;max-width:880px;background:#1A1C22;border:1px solid rgba(243,243,244,0.07);border-radius:1.5rem;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.7);">
+
+          <!-- Chrome bar -->
+          <div style="background:#111215;padding:0.6rem 1rem;display:flex;align-items:center;gap:0.4rem;border-bottom:1px solid rgba(255,255,255,0.05);">
+            <div style="width:9px;height:9px;border-radius:50%;background:#FF5F57;flex-shrink:0;"></div>
+            <div style="width:9px;height:9px;border-radius:50%;background:#FEBC2E;flex-shrink:0;"></div>
+            <div style="width:9px;height:9px;border-radius:50%;background:#28C840;flex-shrink:0;"></div>
+            <div style="flex:1;text-align:center;font-size:0.5rem;color:rgba(255,255,255,0.14);font-weight:500;">app.nectarcrm.com.br/pipeline</div>
+            <div id="cin-ai-status" style="display:flex;align-items:center;gap:0.35rem;font-size:0.5rem;font-weight:700;color:#FEA81F;background:rgba(254,168,31,0.1);border:1px solid rgba(254,168,31,0.2);padding:0.2rem 0.65rem;border-radius:999px;opacity:0;flex-shrink:0;will-change:opacity;">
+              <span style="width:4px;height:4px;border-radius:50%;background:#FEA81F;display:inline-block;animation:pulse 1.5s infinite;"></span>
+              Nectar AI analisando...
+            </div>
+          </div>
+
+          <!-- Kanban grid -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;padding:0.75rem;">
+
+            <!-- PROSPECÇÃO -->
+            <div>
+              <div style="font-size:0.44rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(243,243,244,0.28);margin-bottom:0.4rem;padding:0 0.15rem;">Prospecção <span style="color:rgba(243,243,244,0.16);font-weight:400;">3</span></div>
+              <div style="background:#2C2F38;border:1px solid rgba(255,255,255,0.05);border-radius:0.6rem;padding:0.6rem;margin-bottom:0.35rem;position:relative;">
+                <div style="font-size:0.6rem;font-weight:600;color:rgba(243,243,244,0.8);margin-bottom:0.15rem;">TechCorp LTDA</div>
+                <div style="font-size:0.5rem;color:rgba(243,243,244,0.3);">R$ 48.000</div>
+                <div style="margin-top:0.4rem;height:1.5px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;"><div style="width:25%;height:100%;background:rgba(254,168,31,0.5);"></div></div>
+                <div class="cin-ai-badge" style="position:absolute;top:-5px;right:-5px;background:#1A1C22;border:1px solid rgba(254,168,31,0.35);border-radius:999px;padding:0.15rem 0.45rem;font-size:0.44rem;font-weight:700;color:#FEA81F;opacity:0;transform:scale(0.7);white-space:nowrap;">42%</div>
+              </div>
+              <div style="background:#2C2F38;border:1px solid rgba(255,255,255,0.05);border-radius:0.6rem;padding:0.6rem;margin-bottom:0.35rem;position:relative;">
+                <div style="font-size:0.6rem;font-weight:600;color:rgba(243,243,244,0.8);margin-bottom:0.15rem;">StartX Soluções</div>
+                <div style="font-size:0.5rem;color:rgba(243,243,244,0.3);">R$ 22.000</div>
+                <div style="margin-top:0.4rem;height:1.5px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;"><div style="width:15%;height:100%;background:rgba(254,168,31,0.5);"></div></div>
+                <div class="cin-ai-badge" style="position:absolute;top:-5px;right:-5px;background:#1A1C22;border:1px solid rgba(254,168,31,0.35);border-radius:999px;padding:0.15rem 0.45rem;font-size:0.44rem;font-weight:700;color:#FEA81F;opacity:0;transform:scale(0.7);white-space:nowrap;">28%</div>
+              </div>
+              <div style="background:#2C2F38;border:1px solid rgba(255,255,255,0.05);border-radius:0.6rem;padding:0.6rem;margin-bottom:0.35rem;position:relative;">
+                <div style="font-size:0.6rem;font-weight:600;color:rgba(243,243,244,0.8);margin-bottom:0.15rem;">VisionCo</div>
+                <div style="font-size:0.5rem;color:rgba(243,243,244,0.3);">R$ 15.500</div>
+                <div style="margin-top:0.4rem;height:1.5px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;"><div style="width:10%;height:100%;background:rgba(254,168,31,0.5);"></div></div>
+                <div class="cin-ai-badge" style="position:absolute;top:-5px;right:-5px;background:#1A1C22;border:1px solid rgba(254,168,31,0.35);border-radius:999px;padding:0.15rem 0.45rem;font-size:0.44rem;font-weight:700;color:#FEA81F;opacity:0;transform:scale(0.7);white-space:nowrap;">19%</div>
+              </div>
+            </div>
+
+            <!-- QUALIFICADO -->
+            <div>
+              <div style="font-size:0.44rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(96,165,250,0.55);margin-bottom:0.4rem;padding:0 0.15rem;">Qualificado <span style="color:rgba(243,243,244,0.16);font-weight:400;">3</span></div>
+              <div style="background:#2C2F38;border:1px solid rgba(255,255,255,0.05);border-radius:0.6rem;padding:0.6rem;margin-bottom:0.35rem;position:relative;">
+                <div style="font-size:0.6rem;font-weight:600;color:rgba(243,243,244,0.8);margin-bottom:0.15rem;">Grupo Meridian</div>
+                <div style="font-size:0.5rem;color:rgba(243,243,244,0.3);">R$ 31.500</div>
+                <div style="margin-top:0.4rem;height:1.5px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;"><div style="width:55%;height:100%;background:rgba(96,165,250,0.5);"></div></div>
+                <div class="cin-ai-badge" style="position:absolute;top:-5px;right:-5px;background:#1A1C22;border:1px solid rgba(251,191,36,0.4);border-radius:999px;padding:0.15rem 0.45rem;font-size:0.44rem;font-weight:700;color:#FBBF24;opacity:0;transform:scale(0.7);white-space:nowrap;">⚠ 18d</div>
+              </div>
+              <div style="background:#2C2F38;border:1px solid rgba(255,255,255,0.05);border-radius:0.6rem;padding:0.6rem;margin-bottom:0.35rem;position:relative;">
+                <div style="font-size:0.6rem;font-weight:600;color:rgba(243,243,244,0.8);margin-bottom:0.15rem;">DigitalMind</div>
+                <div style="font-size:0.5rem;color:rgba(243,243,244,0.3);">R$ 19.000</div>
+                <div style="margin-top:0.4rem;height:1.5px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;"><div style="width:45%;height:100%;background:rgba(96,165,250,0.5);"></div></div>
+                <div class="cin-ai-badge" style="position:absolute;top:-5px;right:-5px;background:#1A1C22;border:1px solid rgba(254,168,31,0.35);border-radius:999px;padding:0.15rem 0.45rem;font-size:0.44rem;font-weight:700;color:#FEA81F;opacity:0;transform:scale(0.7);white-space:nowrap;">61%</div>
+              </div>
+              <div style="background:#2C2F38;border:1px solid rgba(239,68,68,0.18);border-radius:0.6rem;padding:0.6rem;margin-bottom:0.35rem;position:relative;">
+                <div style="font-size:0.6rem;font-weight:600;color:rgba(243,243,244,0.8);margin-bottom:0.15rem;">Soluções Beta</div>
+                <div style="font-size:0.5rem;color:rgba(243,243,244,0.3);">R$ 28.200</div>
+                <div style="margin-top:0.4rem;height:1.5px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;"><div style="width:20%;height:100%;background:rgba(239,68,68,0.5);"></div></div>
+                <div class="cin-ai-badge" style="position:absolute;top:-5px;right:-5px;background:#1A1C22;border:1px solid rgba(239,68,68,0.4);border-radius:999px;padding:0.15rem 0.45rem;font-size:0.44rem;font-weight:700;color:#f87171;opacity:0;transform:scale(0.7);white-space:nowrap;">🔴 21%</div>
+              </div>
+            </div>
+
+            <!-- PROPOSTA -->
+            <div>
+              <div style="font-size:0.44rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(254,168,31,0.6);margin-bottom:0.4rem;padding:0 0.15rem;">Proposta <span style="color:rgba(243,243,244,0.16);font-weight:400;">2</span></div>
+              <div style="background:#2C2F38;border:1px solid rgba(254,168,31,0.15);border-radius:0.6rem;padding:0.6rem;margin-bottom:0.35rem;position:relative;">
+                <div style="font-size:0.6rem;font-weight:600;color:rgba(243,243,244,0.8);margin-bottom:0.15rem;">CoreData S.A.</div>
+                <div style="font-size:0.5rem;color:rgba(243,243,244,0.3);">R$ 41.000</div>
+                <div style="margin-top:0.4rem;height:1.5px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;"><div style="width:80%;height:100%;background:rgba(254,168,31,0.7);"></div></div>
+                <div class="cin-ai-badge" style="position:absolute;top:-5px;right:-5px;background:#1A1C22;border:1px solid rgba(74,222,128,0.4);border-radius:999px;padding:0.15rem 0.45rem;font-size:0.44rem;font-weight:700;color:#4ade80;opacity:0;transform:scale(0.7);white-space:nowrap;">✓ 87%</div>
+              </div>
+              <div style="background:#2C2F38;border:1px solid rgba(254,168,31,0.15);border-radius:0.6rem;padding:0.6rem;margin-bottom:0.35rem;position:relative;">
+                <div style="font-size:0.6rem;font-weight:600;color:rgba(243,243,244,0.8);margin-bottom:0.15rem;">MegaSoft LTDA</div>
+                <div style="font-size:0.5rem;color:rgba(243,243,244,0.3);">R$ 35.000</div>
+                <div style="margin-top:0.4rem;height:1.5px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;"><div style="width:65%;height:100%;background:rgba(254,168,31,0.7);"></div></div>
+                <div class="cin-ai-badge" style="position:absolute;top:-5px;right:-5px;background:#1A1C22;border:1px solid rgba(254,168,31,0.35);border-radius:999px;padding:0.15rem 0.45rem;font-size:0.44rem;font-weight:700;color:#FEA81F;opacity:0;transform:scale(0.7);white-space:nowrap;">72%</div>
+              </div>
+            </div>
+
+            <!-- FECHAMENTO -->
+            <div>
+              <div style="font-size:0.44rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(74,222,128,0.6);margin-bottom:0.4rem;padding:0 0.15rem;">Fechamento <span style="color:rgba(243,243,244,0.16);font-weight:400;">2</span></div>
+              <div style="background:#2C2F38;border:1px solid rgba(74,222,128,0.15);border-radius:0.6rem;padding:0.6rem;margin-bottom:0.35rem;position:relative;">
+                <div style="font-size:0.6rem;font-weight:600;color:rgba(243,243,244,0.8);margin-bottom:0.15rem;">BioVida LTDA</div>
+                <div style="font-size:0.5rem;color:rgba(243,243,244,0.3);">R$ 56.000</div>
+                <div style="margin-top:0.4rem;height:1.5px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;"><div style="width:95%;height:100%;background:rgba(74,222,128,0.6);"></div></div>
+                <div class="cin-ai-badge" style="position:absolute;top:-5px;right:-5px;background:#1A1C22;border:1px solid rgba(74,222,128,0.4);border-radius:999px;padding:0.15rem 0.45rem;font-size:0.44rem;font-weight:700;color:#4ade80;opacity:0;transform:scale(0.7);white-space:nowrap;">✓ 95%</div>
+              </div>
+              <div style="background:#2C2F38;border:1px solid rgba(74,222,128,0.15);border-radius:0.6rem;padding:0.6rem;margin-bottom:0.35rem;position:relative;">
+                <div style="font-size:0.6rem;font-weight:600;color:rgba(243,243,244,0.8);margin-bottom:0.15rem;">NovaTech Inc.</div>
+                <div style="font-size:0.5rem;color:rgba(243,243,244,0.3);">R$ 31.200</div>
+                <div style="margin-top:0.4rem;height:1.5px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;"><div style="width:90%;height:100%;background:rgba(74,222,128,0.6);"></div></div>
+                <div class="cin-ai-badge" style="position:absolute;top:-5px;right:-5px;background:#1A1C22;border:1px solid rgba(74,222,128,0.4);border-radius:999px;padding:0.15rem 0.45rem;font-size:0.44rem;font-weight:700;color:#4ade80;opacity:0;transform:scale(0.7);white-space:nowrap;">✓ 91%</div>
+              </div>
+            </div>
+
+          </div><!-- /kanban grid -->
+        </div><!-- /crm frame -->
+
+        <!-- AI Insight 1: CoreData (green) — topo direito -->
+        <div id="cin-ins-1" style="position:absolute;top:18%;right:2%;z-index:40;opacity:0;transform:translateX(12px);will-change:opacity,transform;max-width:210px;">
+          <div style="background:rgba(17,18,21,0.97);backdrop-filter:blur(16px);border:1px solid rgba(74,222,128,0.35);border-radius:0.875rem;padding:0.75rem 1rem;box-shadow:0 12px 40px rgba(0,0,0,0.55),0 0 0 1px rgba(74,222,128,0.05);">
+            <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.4rem;">
+              <div style="width:16px;height:16px;border-radius:5px;background:#FEA81F;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none"><path d="M13 2L4.09 12.96H11L10 22L19.91 11.04H13L13 2Z" fill="#23252C"/></svg>
+              </div>
+              <span style="font-size:0.44rem;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;color:#4ade80;">✓ Alta Probabilidade</span>
+            </div>
+            <div style="font-size:0.65rem;color:rgba(243,243,244,0.7);line-height:1.45;margin-bottom:0.4rem;">CoreData S.A. tem <strong style="color:#F3F3F4;font-weight:700;">87% de chance</strong> de fechar esta semana</div>
+            <div style="font-size:0.5rem;color:rgba(74,222,128,0.75);font-weight:600;">→ Agendar reunião de fechamento</div>
+          </div>
+        </div>
+
+        <!-- AI Insight 2: Meridian (amber) — meio esquerdo -->
+        <div id="cin-ins-2" style="position:absolute;top:40%;left:1.5%;z-index:40;opacity:0;transform:translateX(-12px);will-change:opacity,transform;max-width:210px;">
+          <div style="background:rgba(17,18,21,0.97);backdrop-filter:blur(16px);border:1px solid rgba(251,191,36,0.35);border-radius:0.875rem;padding:0.75rem 1rem;box-shadow:0 12px 40px rgba(0,0,0,0.55),0 0 0 1px rgba(251,191,36,0.05);">
+            <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.4rem;">
+              <div style="width:16px;height:16px;border-radius:5px;background:#FEA81F;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none"><path d="M13 2L4.09 12.96H11L10 22L19.91 11.04H13L13 2Z" fill="#23252C"/></svg>
+              </div>
+              <span style="font-size:0.44rem;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;color:#FBBF24;">⚠ Deal Parado</span>
+            </div>
+            <div style="font-size:0.65rem;color:rgba(243,243,244,0.7);line-height:1.45;margin-bottom:0.4rem;">Grupo Meridian sem contato há <strong style="color:#F3F3F4;font-weight:700;">18 dias</strong></div>
+            <div style="font-size:0.5rem;color:rgba(251,191,36,0.75);font-weight:600;">→ Acionar agora para não perder</div>
+          </div>
+        </div>
+
+        <!-- AI Insight 3: Soluções Beta (red) — baixo centro -->
+        <div id="cin-ins-3" style="position:absolute;bottom:18%;left:25%;z-index:40;opacity:0;transform:translateY(12px);will-change:opacity,transform;max-width:210px;">
+          <div style="background:rgba(17,18,21,0.97);backdrop-filter:blur(16px);border:1px solid rgba(239,68,68,0.35);border-radius:0.875rem;padding:0.75rem 1rem;box-shadow:0 12px 40px rgba(0,0,0,0.55),0 0 0 1px rgba(239,68,68,0.05);">
+            <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.4rem;">
+              <div style="width:16px;height:16px;border-radius:5px;background:#FEA81F;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none"><path d="M13 2L4.09 12.96H11L10 22L19.91 11.04H13L13 2Z" fill="#23252C"/></svg>
+              </div>
+              <span style="font-size:0.44rem;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;color:#f87171;">🔴 Risco Detectado</span>
+            </div>
+            <div style="font-size:0.65rem;color:rgba(243,243,244,0.7);line-height:1.45;margin-bottom:0.4rem;">Soluções Beta com <strong style="color:#F3F3F4;font-weight:700;">21% de chance</strong> — alto risco de perda</div>
+            <div style="font-size:0.5rem;color:rgba(239,68,68,0.75);font-weight:600;">→ Considerar oferta especial</div>
+          </div>
+        </div>
+
+      </div><!-- /cin-board -->
+
+      <!-- ③ AI INSIGHT PANEL (rises from bottom) -->
+      <div id="cin-ai-panel" style="position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);z-index:30;opacity:0;width:calc(100% - 2rem);max-width:720px;will-change:opacity,transform;">
+        <div style="background:rgba(17,18,21,0.96);backdrop-filter:blur(20px);border:1px solid rgba(254,168,31,0.25);border-radius:1rem;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;box-shadow:0 24px 80px rgba(0,0,0,0.65),0 0 0 1px rgba(254,168,31,0.04);">
+          <div style="width:34px;height:34px;border-radius:9px;background:#FEA81F;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M13 2L4.09 12.96H11L10 22L19.91 11.04H13L13 2Z" fill="#23252C"/></svg>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:0.48rem;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;color:#FEA81F;margin-bottom:0.2rem;">Nectar AI · Análise concluída</div>
+            <div style="font-size:0.72rem;color:rgba(243,243,244,0.6);line-height:1.4;"><span style="color:#F3F3F4;font-weight:600;">R$ 287.400 em jogo</span> · 3 deals em risco · CoreData com 87% de chance de fechar esta semana</div>
+          </div>
+          <a href="#form" style="background:#FEA81F;color:#23252C;font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;padding:0.5rem 1rem;border-radius:999px;text-decoration:none;flex-shrink:0;white-space:nowrap;">Ver detalhes</a>
+        </div>
+      </div>
+
+    </div><!-- /cin-sticky -->
+  </section>
+  <!-- ── /CINEMATIC ── -->
+
+  <!-- ── HERO ──────────────────────────── -->
+  <section class="relative px-6 lg:px-12 xl:px-20 pt-4 pb-20 overflow-hidden" style="background:#23252C;">
+    <!-- Glow background -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-nectar/8 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/5 blur-[100px] rounded-full pointer-events-none"></div>
+
+    <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[75vh]">
+      <!-- Left: Copy -->
+      <div class="flex flex-col justify-center">
+        <div class="reveal mb-6">
+          <span class="inline-flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.25em] text-nectar bg-nectar/10 border border-nectar/25 px-4 py-2 rounded-full">
+            <span class="w-1.5 h-1.5 rounded-full bg-nectar animate-pulse-slow"></span>
+            Acesso Beta Exclusivo · 50 vagas
+          </span>
+        </div>
+
+        <div class="reveal delay-1 mb-6">
+          <h1 class="text-4xl lg:text-5xl xl:text-6xl font-black tracking-tightest leading-[1.0] text-light">
+            Uma nova era<br/>começa <span class="gradient-text">agora.</span>
+          </h1>
+        </div>
+
+        <div class="reveal delay-2 mb-8">
+          <p class="text-base lg:text-lg text-light/55 leading-relaxed font-normal max-w-md">
+            O Nectar está ganhando Inteligência Artificial de verdade. Uma IA que entende o seu CRM, o seu pipeline, os seus leads e age por você.
+          </p>
+        </div>
+
+        <div class="reveal delay-3 flex flex-wrap gap-3 mb-10">
+          <a href="#form" class="btn-nectar flex items-center gap-2 bg-nectar text-dark text-[0.75rem] font-bold uppercase tracking-widest px-7 py-4 rounded-full shadow-lg shadow-nectar/30">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M13 2L4.09 12.96H11L10 22L19.91 11.04H13L13 2Z" fill="currentColor"/></svg>
+            Quero ser Beta Tester
+          </a>
+          <a href="#features" class="flex items-center gap-2 bg-light/7 border border-light/15 text-light/70 text-[0.75rem] font-semibold uppercase tracking-widest px-7 py-4 rounded-full hover:bg-light/12 transition-colors">
+            Ver funcionalidades
+          </a>
+        </div>
+
+        <!-- Slots indicator -->
+        <div class="reveal delay-4 flex items-center gap-4 flex-wrap">
+          <div class="flex gap-1">
+            <!-- 10 dots, 7 filled -->
+            <span class="w-2 h-2 rounded-full bg-nectar"></span>
+            <span class="w-2 h-2 rounded-full bg-nectar"></span>
+            <span class="w-2 h-2 rounded-full bg-nectar"></span>
+            <span class="w-2 h-2 rounded-full bg-nectar"></span>
+            <span class="w-2 h-2 rounded-full bg-nectar"></span>
+            <span class="w-2 h-2 rounded-full bg-nectar"></span>
+            <span class="w-2 h-2 rounded-full bg-nectar"></span>
+            <span class="w-2 h-2 rounded-full bg-light/20"></span>
+            <span class="w-2 h-2 rounded-full bg-light/20"></span>
+            <span class="w-2 h-2 rounded-full bg-light/20"></span>
+          </div>
+          <span class="text-[0.65rem] font-semibold uppercase tracking-widest text-light/45">vagas preenchendo agora</span>
+          <span class="text-[0.65rem] font-bold uppercase tracking-widest text-red-400 bg-red-400/10 border border-red-400/20 px-2.5 py-1 rounded-full">Apenas 50 vagas</span>
+        </div>
+      </div>
+
+      <!-- Right: CRM Product Screenshot -->
+      <div class="reveal delay-2 relative">
+        <!-- Browser chrome frame -->
+        <div class="bg-dark-mid border border-light/8 rounded-4xl overflow-hidden shadow-2xl glow-nectar">
+          <div class="bg-dark/70 px-5 py-3.5 flex items-center gap-2 border-b border-light/7">
+            <div class="w-3 h-3 rounded-full bg-[#FF5F57]"></div>
+            <div class="w-3 h-3 rounded-full bg-[#FEBC2E]"></div>
+            <div class="w-3 h-3 rounded-full bg-[#28C840]"></div>
+            <div class="flex-1 mx-4 bg-dark-soft/80 border border-light/8 rounded-full px-4 py-1.5 flex items-center gap-2">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="rgba(243,243,244,0.3)" stroke-width="2"/></svg>
+              <span class="text-[0.6rem] text-light/25 font-medium">app.nectarcrm.com.br/oportunidades</span>
+            </div>
+          </div>
+          <!-- AI Chat Interface -->
+          <div class="relative overflow-hidden bg-[#1A1C22]" style="aspect-ratio: 16/10;">
+            <!-- Chat header -->
+            <div class="flex items-center gap-2.5 px-4 py-3 border-b border-white/6 bg-[#111215]">
+              <div class="w-6 h-6 rounded-lg bg-nectar flex items-center justify-center flex-shrink-0">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M13 2L4.09 12.96H11L10 22L19.91 11.04H13L13 2Z" fill="#23252C"/></svg>
+              </div>
+              <div class="flex-1">
+                <span class="text-[0.65rem] font-bold text-light">Nectar AI</span>
+                <span class="text-[0.55rem] text-light/35 ml-2">Pipeline · Q2 2025</span>
+              </div>
+              <span class="flex items-center gap-1 text-[0.55rem] font-bold text-green-400 bg-green-400/10 border border-green-400/20 px-2 py-0.5 rounded-full">
+                <span class="w-1 h-1 rounded-full bg-green-400 animate-pulse-slow"></span>Ativo
+              </span>
+            </div>
+            <!-- Chat messages -->
+            <div class="px-4 py-3 flex flex-col gap-2.5 overflow-hidden">
+              <!-- User message -->
+              <div class="chat-user self-end px-3 py-2 text-[0.65rem] font-medium max-w-[65%]" style="animation:cardIn 0.4s 0.3s both;opacity:0">
+                Como está meu pipeline esta semana?
+              </div>
+              <!-- AI response -->
+              <div class="chat-ai self-start px-3.5 py-3 text-[0.65rem] leading-relaxed max-w-[90%]" style="animation:cardIn 0.4s 0.8s both;opacity:0">
+                <span class="block text-[0.5rem] font-bold uppercase tracking-widest text-nectar mb-2">Nectar AI · Análise de Pipeline</span>
+                <div class="flex items-center gap-3 mb-2.5 pb-2.5 border-b border-white/8">
+                  <div class="text-center">
+                    <div class="text-base font-black text-light leading-none">12</div>
+                    <div class="text-[0.5rem] text-light/35 mt-0.5">oportunidades</div>
+                  </div>
+                  <div class="w-px h-6 bg-white/10"></div>
+                  <div class="text-center">
+                    <div class="text-base font-black gradient-text leading-none">R$287k</div>
+                    <div class="text-[0.5rem] text-light/35 mt-0.5">em jogo</div>
+                  </div>
+                  <div class="w-px h-6 bg-white/10"></div>
+                  <div class="text-center">
+                    <div class="text-base font-black text-nectar leading-none">3</div>
+                    <div class="text-[0.5rem] text-light/35 mt-0.5">em risco</div>
+                  </div>
+                </div>
+                <!-- Sellers performance -->
+                <div class="text-[0.5rem] font-bold uppercase tracking-widest text-light/30 mb-1.5">Previsão por vendedor</div>
+                <div class="flex flex-col gap-1.5">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[0.6rem] w-14 text-light/70 font-medium">Rafael</span>
+                    <div class="flex-1 h-1 rounded-full bg-white/8 overflow-hidden">
+                      <div class="h-full bg-green-400 rounded-full" style="width:94%;animation:barGrow 0.9s 1.4s both"></div>
+                    </div>
+                    <span class="text-[0.6rem] font-bold text-green-400 w-7 text-right">94%</span>
+                    <span class="text-[0.55rem]">✅</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[0.6rem] w-14 text-light/70 font-medium">Amanda</span>
+                    <div class="flex-1 h-1 rounded-full bg-white/8 overflow-hidden">
+      <div class="h-full bg-nectar rounded-full" style="width:67%;animation:barGrow 0.9s 1.6s both"></div>
+                    </div>
+                    <span class="text-[0.6rem] font-bold text-nectar w-7 text-right">67%</span>
+                    <span class="text-[0.55rem]">⚠️</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[0.6rem] w-14 text-light/70 font-medium">Carlos</span>
+                    <div class="flex-1 h-1 rounded-full bg-white/8 overflow-hidden">
+                      <div class="h-full bg-red-400 rounded-full" style="width:31%;animation:barGrow 0.9s 1.8s both"></div>
+                    </div>
+                    <span class="text-[0.6rem] font-bold text-red-400 w-7 text-right">31%</span>
+                    <span class="text-[0.55rem]">🔴</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Typing indicator -->
+              <div class="chat-ai self-start px-3.5 py-2.5 flex items-center gap-1" style="animation:cardIn 0.4s 2.4s both;opacity:0">
+                <span class="w-1.5 h-1.5 rounded-full bg-light/40" style="animation:typingDot 1.2s 2.5s infinite"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-light/40" style="animation:typingDot 1.2s 2.7s infinite"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-light/40" style="animation:typingDot 1.2s 2.9s infinite"></span>
+              </div>
+            </div>
+            <!-- Bottom fade -->
+            <div class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#1A1C22] to-transparent pointer-events-none"></div>
+          </div>
+        </div>
+        <!-- Floating badge -->
+        <div class="absolute -top-4 -right-4 bg-dark-soft border border-light/10 rounded-2xl px-4 py-2.5 shadow-xl">
+          <div class="text-[0.6rem] font-bold uppercase tracking-widest text-nectar mb-0.5">Previsão Q2</div>
+          <div class="text-lg font-black text-light leading-none">R$ 287.400</div>
+          <div class="text-[0.6rem] text-green-400 font-semibold mt-0.5">↑ +23% vs Q1</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TRUST BAR — DARK ─────────────── -->
+  <div class="reveal border-y border-light/8 px-6 lg:px-12 py-10" style="background:#23252C;">
+    <div class="flex items-center justify-center gap-8 lg:gap-16 flex-wrap">
+      <div class="text-center">
+        <div class="text-3xl font-black gradient-text">+5.000</div>
+        <div class="text-[0.65rem] font-semibold uppercase tracking-widest text-light/40 mt-1">empresas clientes</div>
+      </div>
+      <div class="w-px h-10 bg-light/12 hidden lg:block"></div>
+      <div class="text-center">
+        <div class="text-3xl font-black gradient-text">50</div>
+        <div class="text-[0.65rem] font-semibold uppercase tracking-widest text-light/40 mt-1">vagas exclusivas</div>
+      </div>
+      <div class="w-px h-10 bg-light/12 hidden lg:block"></div>
+      <div class="text-center">
+        <div class="text-3xl font-black gradient-text">5</div>
+        <div class="text-[0.65rem] font-semibold uppercase tracking-widest text-light/40 mt-1">agentes de IA nativos</div>
+      </div>
+      <div class="w-px h-10 bg-light/12 hidden lg:block"></div>
+      <div class="text-center">
+        <div class="text-3xl font-black gradient-text">0</div>
+        <div class="text-[0.65rem] font-semibold uppercase tracking-widest text-light/40 mt-1">dependência de BI externo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PRODUCT SCREENSHOTS — LIGHT ─────── -->
+  <section class="px-4 lg:px-8 pb-0 pt-4" style="background:#23252C;">
+    <div class="relative w-full rounded-4xl overflow-hidden border border-light/8 bg-[#2C2F38]">
+      <!-- Header -->
+      <div class="px-6 lg:px-10 pt-10 pb-6 text-center">
+        <h2 class="text-2xl lg:text-3xl font-black tracking-tightest text-light mb-2">Agora com <span class="gradient-text">Inteligência Artificial</span> nativa.</h2>
+        <p class="text-sm text-light/50 max-w-md mx-auto">Todas as funcionalidades que você já conhece, potencializadas por IA, direto dentro do seu CRM.</p>
+      </div>
+      <!-- Two modules side by side -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 px-4 pb-4">
+
+        <!-- Module 1: Kanban Pipeline -->
+        <div class="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#1A1C22]">
+          <div class="bg-[#111215] px-4 py-2.5 flex items-center gap-1.5 border-b border-white/6">
+            <div class="w-2.5 h-2.5 rounded-full bg-[#FF5F57]"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-[#28C840]"></div>
+            <span class="flex-1 text-center text-[0.6rem] text-white/20 font-medium">Pipeline · Em andamento</span>
+          </div>
+          <div class="p-4 overflow-hidden" style="aspect-ratio:16/10;">
+            <!-- Kanban columns -->
+            <div class="flex gap-2 h-full">
+              <!-- Col 1: Prospecto -->
+              <div class="flex-1 flex flex-col gap-1.5">
+                <div class="text-[0.5rem] font-bold uppercase tracking-widest text-white/30 mb-1 px-1">Prospecto <span class="text-white/20 font-normal">4</span></div>
+                <div class="kanban-card bg-[#2C2F38] border border-white/6 rounded-xl p-2.5" style="animation:cardIn 0.4s 0.1s both">
+                  <div class="text-[0.6rem] font-semibold text-white/80 mb-1">TechCorp LTDA</div>
+                  <div class="text-[0.55rem] text-white/35">R$ 48.000</div>
+                  <div class="mt-1.5 h-0.5 rounded-full bg-white/8 overflow-hidden"><div class="h-full bg-nectar/60 rounded-full" style="width:30%"></div></div>
+                </div>
+                <div class="kanban-card bg-[#2C2F38] border border-white/6 rounded-xl p-2.5" style="animation:cardIn 0.4s 0.25s both">
+                  <div class="text-[0.6rem] font-semibold text-white/80 mb-1">StartX Soluções</div>
+                  <div class="text-[0.55rem] text-white/35">R$ 22.000</div>
+                  <div class="mt-1.5 h-0.5 rounded-full bg-white/8 overflow-hidden"><div class="h-full bg-nectar/60 rounded-full" style="width:20%"></div></div>
+                </div>
+                <div class="kanban-card bg-[#2C2F38] border border-white/6 rounded-xl p-2.5" style="animation:cardIn 0.4s 0.4s both">
+                  <div class="text-[0.6rem] font-semibold text-white/80 mb-1">VisionCo</div>
+                  <div class="text-[0.55rem] text-white/35">R$ 15.500</div>
+                  <div class="mt-1.5 h-0.5 rounded-full bg-white/8 overflow-hidden"><div class="h-full bg-nectar/60 rounded-full" style="width:15%"></div></div>
+                </div>
+              </div>
+              <!-- Col 2: Qualificado -->
+              <div class="flex-1 flex flex-col gap-1.5">
+                <div class="text-[0.5rem] font-bold uppercase tracking-widest text-blue-400/50 mb-1 px-1">Qualificado <span class="text-white/20 font-normal">3</span></div>
+                <div class="kanban-card bg-[#2C2F38] border border-blue-400/15 rounded-xl p-2.5" style="animation:cardIn 0.4s 0.2s both">
+                  <div class="text-[0.6rem] font-semibold text-white/80 mb-1">Grupo Meridian</div>
+                  <div class="text-[0.55rem] text-white/35">R$ 31.500</div>
+                  <div class="mt-1.5 h-0.5 rounded-full bg-white/8 overflow-hidden"><div class="h-full bg-blue-400/60 rounded-full" style="width:55%"></div></div>
+                </div>
+                <div class="kanban-card bg-[#2C2F38] border border-white/6 rounded-xl p-2.5" style="animation:cardIn 0.4s 0.35s both">
+                  <div class="text-[0.6rem] font-semibold text-white/80 mb-1">DigitalMind</div>
+                  <div class="text-[0.55rem] text-white/35">R$ 19.000</div>
+                  <div class="mt-1.5 h-0.5 rounded-full bg-white/8 overflow-hidden"><div class="h-full bg-blue-400/60 rounded-full" style="width:45%"></div></div>
+                </div>
+              </div>
+              <!-- Col 3: Proposta -->
+              <div class="flex-1 flex flex-col gap-1.5">
+                <div class="text-[0.5rem] font-bold uppercase tracking-widest text-nectar/60 mb-1 px-1">Proposta <span class="text-white/20 font-normal">2</span></div>
+                <div class="kanban-card bg-[#2C2F38] border border-nectar/20 rounded-xl p-2.5" style="animation:cardIn 0.4s 0.3s both">
+                  <div class="text-[0.6rem] font-semibold text-white/80 mb-1">Soluções Beta</div>
+                  <div class="text-[0.55rem] text-white/35">R$ 28.200</div>
+                  <div class="mt-1.5 h-0.5 rounded-full bg-white/8 overflow-hidden"><div class="h-full bg-nectar/70 rounded-full" style="width:75%"></div></div>
+                </div>
+                <div class="kanban-card bg-[#2C2F38] border border-nectar/20 rounded-xl p-2.5" style="animation:cardIn 0.4s 0.45s both">
+                  <div class="text-[0.6rem] font-semibold text-white/80 mb-1">CoreData</div>
+                  <div class="text-[0.55rem] text-white/35">R$ 41.000</div>
+                  <div class="mt-1.5 h-0.5 rounded-full bg-white/8 overflow-hidden"><div class="h-full bg-nectar/70 rounded-full" style="width:80%"></div></div>
+                </div>
+              </div>
+            </div>
+            <!-- AI floating badge -->
+            <div class="absolute bottom-4 left-4 right-4 flex items-center gap-2.5 bg-[#111215]/90 backdrop-blur-sm border border-nectar/20 rounded-2xl px-3 py-2.5" style="animation:cardIn 0.5s 0.7s both">
+              <div class="w-6 h-6 rounded-lg bg-nectar flex items-center justify-center flex-shrink-0">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M13 2L4.09 12.96H11L10 22L19.91 11.04H13L13 2Z" fill="#23252C"/></svg>
+              </div>
+              <span class="text-[0.6rem] text-white/60 leading-tight flex-1">"CoreData tem 87% de chance de fechar esta semana"</span>
+              <span class="text-[0.55rem] font-bold text-nectar bg-nectar/10 px-2 py-0.5 rounded-full flex-shrink-0">IA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Module 2: Won Deals -->
+        <div class="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#1A1C22]">
+          <div class="bg-[#111215] px-4 py-2.5 flex items-center gap-1.5 border-b border-white/6">
+            <div class="w-2.5 h-2.5 rounded-full bg-[#FF5F57]"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-[#28C840]"></div>
+            <span class="flex-1 text-center text-[0.6rem] text-white/20 font-medium">Pipeline · Finalizadas</span>
+          </div>
+          <div class="p-4 flex flex-col gap-3 overflow-hidden" style="aspect-ratio:16/10;">
+            <!-- Revenue header -->
+            <div class="flex items-end justify-between" style="animation:cardIn 0.4s 0.1s both">
+              <div>
+                <div class="text-[0.5rem] font-bold uppercase tracking-widest text-white/30 mb-0.5">Receita fechada · Q2</div>
+                <div class="text-2xl font-black text-white leading-none">R$ <span class="gradient-text">287.400</span></div>
+              </div>
+              <span class="text-[0.6rem] font-bold text-green-400 bg-green-400/10 border border-green-400/20 px-2 py-1 rounded-full">↑ +23% vs Q1</span>
+            </div>
+            <!-- Won deals list -->
+            <div class="flex flex-col gap-1.5 flex-1">
+              <div class="flex items-center gap-2.5 bg-[#2C2F38] rounded-xl px-3 py-2 border border-green-400/12" style="animation:cardIn 0.4s 0.2s both">
+                <div class="w-5 h-5 rounded-full bg-green-400/15 border border-green-400/30 flex items-center justify-center flex-shrink-0">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="flex-1 min-w-0"><div class="text-[0.6rem] font-semibold text-white/80">TechCorp LTDA</div></div>
+                <div class="text-[0.6rem] font-bold text-green-400">R$ 48k</div>
+                <div class="w-16 h-1 rounded-full bg-white/8 overflow-hidden flex-shrink-0"><div class="h-full bg-green-400/70 rounded-full" style="width:78%;animation:barGrow 0.8s 0.9s both"></div></div>
+              </div>
+              <div class="flex items-center gap-2.5 bg-[#2C2F38] rounded-xl px-3 py-2 border border-green-400/12" style="animation:cardIn 0.4s 0.32s both">
+                <div class="w-5 h-5 rounded-full bg-green-400/15 border border-green-400/30 flex items-center justify-center flex-shrink-0">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="flex-1 min-w-0"><div class="text-[0.6rem] font-semibold text-white/80">CoreData S.A.</div></div>
+                <div class="text-[0.6rem] font-bold text-green-400">R$ 62k</div>
+                <div class="w-16 h-1 rounded-full bg-white/8 overflow-hidden flex-shrink-0"><div class="h-full bg-green-400/70 rounded-full" style="width:100%;animation:barGrow 0.8s 1.0s both"></div></div>
+              </div>
+              <div class="flex items-center gap-2.5 bg-[#2C2F38] rounded-xl px-3 py-2 border border-green-400/12" style="animation:cardIn 0.4s 0.44s both">
+                <div class="w-5 h-5 rounded-full bg-green-400/15 border border-green-400/30 flex items-center justify-center flex-shrink-0">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="flex-1 min-w-0"><div class="text-[0.6rem] font-semibold text-white/80">Grupo Meridian</div></div>
+                <div class="text-[0.6rem] font-bold text-green-400">R$ 31k</div>
+                <div class="w-16 h-1 rounded-full bg-white/8 overflow-hidden flex-shrink-0"><div class="h-full bg-green-400/70 rounded-full" style="width:50%;animation:barGrow 0.8s 1.1s both"></div></div>
+              </div>
+              <div class="flex items-center gap-2.5 bg-[#2C2F38] rounded-xl px-3 py-2 border border-green-400/12" style="animation:cardIn 0.4s 0.56s both">
+                <div class="w-5 h-5 rounded-full bg-green-400/15 border border-green-400/30 flex items-center justify-center flex-shrink-0">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="flex-1 min-w-0"><div class="text-[0.6rem] font-semibold text-white/80">StartX Soluções</div></div>
+                <div class="text-[0.6rem] font-bold text-green-400">R$ 41k</div>
+                <div class="w-16 h-1 rounded-full bg-white/8 overflow-hidden flex-shrink-0"><div class="h-full bg-green-400/70 rounded-full" style="width:66%;animation:barGrow 0.8s 1.2s both"></div></div>
+              </div>
+              <div class="flex items-center gap-2.5 bg-[#2C2F38] rounded-xl px-3 py-2 border border-green-400/12" style="animation:cardIn 0.4s 0.68s both">
+                <div class="w-5 h-5 rounded-full bg-green-400/15 border border-green-400/30 flex items-center justify-center flex-shrink-0">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="flex-1 min-w-0"><div class="text-[0.6rem] font-semibold text-white/80">VisionCo</div></div>
+                <div class="text-[0.6rem] font-bold text-green-400">R$ 28k</div>
+                <div class="w-16 h-1 rounded-full bg-white/8 overflow-hidden flex-shrink-0"><div class="h-full bg-green-400/70 rounded-full" style="width:45%;animation:barGrow 0.8s 1.3s both"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- Bottom AI badge bar -->
+      <div class="flex items-center justify-center gap-3 px-6 py-5 border-t border-light/8 flex-wrap">
+        <div class="flex items-center gap-2 text-xs text-light/55">
+          <div class="w-5 h-5 rounded-lg bg-nectar flex items-center justify-center flex-shrink-0">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M13 2L4.09 12.96H11L10 22L19.91 11.04H13L13 2Z" fill="#23252C"/></svg>
+          </div>
+          <span>A IA do Nectar vive <strong class="text-light/80">dentro</strong> dessas telas</span>
+        </div>
+        <span class="text-light/25">·</span>
+        <span class="text-xs text-light/45">Sem abrir outro app. Sem trocar de aba.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MANIFESTO — DARK ─────────────── -->
+  <section id="features" class="px-6 lg:px-12 py-24 text-center relative overflow-hidden" style="background:#23252C;">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-80 bg-nectar/8 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="relative z-10 max-w-4xl mx-auto reveal">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-black tracking-tightest text-light leading-[1.1] mb-8">
+        Não aquela IA genérica que você já viu.<br/>
+        Uma <span class="gradient-text">IA que age</span> dentro do seu CRM.
+      </h2>
+      <p class="text-lg md:text-xl font-normal text-light/55 leading-relaxed max-w-3xl mx-auto">
+        Acesse, em primeira mão, o conjunto de funcionalidades de Inteligência Artificial nativamente integradas, e você, como cliente da nossa base, terá acesso antes de todo mundo.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       FEATURES — LIGHT
+  ══════════════════════════════════════ -->
+  <section class="px-6 lg:px-16 xl:px-24 pt-8 pr-8 pb-20 pl-8" style="background:#1A1C22;">
+    <div class="flex flex-col gap-2 mb-16 pt-12 reveal">
+      <span class="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-nectar/80">Funcionalidades de IA</span>
+      <h2 class="text-3xl font-black tracking-tightest text-light">5 Agentes. 1 Plataforma.</h2>
+    </div>
+
+    <div class="flex flex-col gap-24">
+
+      <!-- Feature 1: Nectar AI ─────────── -->
+      <div class="group grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-center reveal">
+        <!-- Visual -->
+        <div class="aspect-square lg:aspect-[4/3] overflow-hidden flex bg-dark-mid rounded-5xl relative shadow-inner items-center justify-center feature-card border border-light/7">
+          <div class="absolute top-[-20%] left-[-20%] w-[70%] h-[70%] bg-nectar rounded-full blur-3xl opacity-10"></div>
+          <!-- Inner mockup -->
+          <div class="overflow-hidden transform group-hover:scale-[1.02] transition-transform duration-500 w-[88%] h-[88%] bg-dark rounded-3xl border border-light/10 shadow-2xl flex flex-col">
+            <div class="bg-dark/80 px-4 py-3 border-b border-light/7 flex items-center gap-2">
+              <div class="w-2.5 h-2.5 rounded-full bg-[#FF5F57]"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-[#28C840]"></div>
+              <span class="flex-1 text-center text-[0.65rem] text-light/25">Pipeline · Q2 2025</span>
+            </div>
+            <div class="flex-1 p-5 flex flex-col gap-3">
+              <div class="chat-user self-end px-3.5 py-2.5 text-xs font-medium max-w-[70%]">
+                Preveja meu fechamento do trimestre.
+              </div>
+              <div class="chat-ai self-start px-3.5 py-3 text-xs leading-relaxed max-w-[85%]">
+                <span class="block text-[0.55rem] font-bold uppercase tracking-widest text-nectar mb-1.5">Nectar AI</span>
+                Previsão Q2: <strong class="text-nectar">R$ 287.400</strong><br/>
+                📈 Alta confiança: R$ 142k<br/>
+                ⚠️ Risco moderado: R$ 98k<br/>
+                🔴 3 deals em zona crítica
+              </div>
+              <div class="chat-user self-end px-3.5 py-2.5 text-xs font-medium max-w-[60%]">
+                Quais estão em risco?
+              </div>
+              <div class="chat-ai self-start px-3.5 py-3 text-xs leading-relaxed max-w-[80%]">
+                <span class="block text-[0.55rem] font-bold uppercase tracking-widest text-nectar mb-1.5">Nectar AI</span>
+                Vejo Soluções Beta parada há 17 dias e sem interação recente. Gero um e-mail de reativação?
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Content -->
+        <div class="flex flex-col justify-center items-start lg:pr-12">
+          <p class="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-nectar/80 mb-4">Funcionalidade 01</p>
+          <h3 class="text-4xl lg:text-5xl font-black tracking-tightest text-light mb-6 leading-[1.0]">
+            Nectar AI<br/><span class="gradient-text">Chega de BI.</span>
+          </h3>
+          <p class="text-base text-light/55 leading-relaxed font-normal mb-6 max-w-lg">
+            Um assistente que entende onde você está no CRM: oportunidade, pipeline, contato. Pergunte em linguagem natural e receba respostas sobre seus dados instantaneamente.
+          </p>
+          <ul class="flex flex-col gap-3 mb-8">
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Perguntas em português sobre qualquer dado do CRM</li>
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Geração de e-mails e roteiros de vendas personalizados</li>
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Análise em tempo real sem sair da tela</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Feature 2: Enriquecimento ─────── -->
+      <div class="group grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-center reveal">
+        <!-- Content (left on desktop) -->
+        <div class="flex flex-col justify-center items-start lg:pl-0 order-2 lg:order-1">
+          <p class="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-nectar/80 mb-4">Funcionalidade 02</p>
+          <h3 class="text-4xl lg:text-5xl font-black tracking-tightest text-light mb-6 leading-[1.0]">
+            Enriquecedor<br/><span class="gradient-text">Automático</span>
+          </h3>
+          <p class="text-base text-light/55 leading-relaxed font-normal mb-6 max-w-lg">
+            Cadastrou um contato com site ou CNPJ? O agente pesquisa automaticamente no LinkedIn, na web, Speedio e Big Data Corp e preenche tudo em segundos.
+          </p>
+          <ul class="flex flex-col gap-3 mb-8">
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Faturamento, funcionários e segmento</li>
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Redes sociais e perfil LinkedIn</li>
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Sócios e estrutura societária via CNPJ</li>
+          </ul>
+        </div>
+        <!-- Visual -->
+        <div class="aspect-square lg:aspect-[4/3] overflow-hidden flex bg-dark-mid rounded-5xl relative shadow-inner items-center justify-center feature-card border border-light/7 order-1 lg:order-2">
+          <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-green-500 rounded-full blur-3xl opacity-5"></div>
+          <div class="w-[88%] transform group-hover:translate-y-[-6px] transition-transform duration-500 bg-dark rounded-3xl border border-light/10 shadow-2xl p-6">
+            <!-- Contact header -->
+            <div class="flex items-center gap-4 mb-5 pb-5 border-b border-light/7">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-nectar flex items-center justify-center font-black text-lg text-white flex-shrink-0">M</div>
+              <div>
+                <div class="text-sm font-bold text-light">Meridian Tech LTDA</div>
+                <div class="text-xs text-light/40">CNPJ: 12.345.678/0001-99</div>
+              </div>
+            </div>
+            <!-- Enriched fields -->
+            <div class="grid grid-cols-2 gap-4 mb-5">
+              <div><div class="text-[0.55rem] font-bold uppercase tracking-widest text-light/30 mb-1">Faturamento</div><div class="text-sm font-semibold text-light">R$ 8,2 milhões</div></div>
+              <div><div class="text-[0.55rem] font-bold uppercase tracking-widest text-light/30 mb-1">Funcionários</div><div class="text-sm font-semibold text-light">47–120</div></div>
+              <div><div class="text-[0.55rem] font-bold uppercase tracking-widest text-light/30 mb-1">Segmento</div><div class="text-sm font-semibold text-light">SaaS B2B</div></div>
+              <div><div class="text-[0.55rem] font-bold uppercase tracking-widest text-light/30 mb-1">Score</div><div class="text-sm font-bold text-green-400">92 / 100</div></div>
+            </div>
+            <div class="inline-flex items-center gap-2 text-[0.65rem] font-bold text-green-400 bg-green-400/10 border border-green-400/20 px-3 py-1.5 rounded-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+              Enriquecido automaticamente · 2s atrás
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 3: Deal Coach ─────────── -->
+      <div class="group grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-center reveal">
+        <!-- Visual -->
+        <div class="aspect-square lg:aspect-[4/3] overflow-hidden flex bg-dark-mid rounded-5xl relative shadow-inner items-center justify-center feature-card border border-light/7">
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-nectar/5 rounded-full blur-[80px]"></div>
+          <div class="w-[88%] transform group-hover:translate-y-[-6px] transition-transform duration-500 bg-dark rounded-3xl border border-light/10 shadow-2xl p-5">
+            <div class="text-[0.6rem] font-bold uppercase tracking-widest text-light/30 mb-4">Deal Coach: Pipeline Ativo</div>
+            <div class="flex flex-col gap-3">
+              <!-- Deal 1 -->
+              <div class="flex items-center gap-3 bg-dark-soft rounded-2xl p-3.5 border border-light/5">
+                <div class="w-8 h-8 rounded-xl bg-green-400/10 flex items-center justify-center text-sm flex-shrink-0">🟢</div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-semibold text-light">TechCorp LTDA</div>
+                  <div class="text-[0.6rem] text-light/40 mt-0.5">R$ 48.000 · Proposta enviada</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs font-bold text-green-400">87%</div>
+                  <div class="w-8 h-1 bg-light/10 rounded mt-1.5 overflow-hidden"><div class="h-full bg-green-400 rounded" style="width:87%"></div></div>
+                </div>
+              </div>
+              <!-- Deal 2 -->
+              <div class="flex items-center gap-3 bg-dark-soft rounded-2xl p-3.5 border border-nectar/15">
+                <div class="w-8 h-8 rounded-xl bg-nectar/10 flex items-center justify-center text-sm flex-shrink-0">⚠️</div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-semibold text-light">Grupo Meridian</div>
+                  <div class="text-[0.6rem] text-light/40 mt-0.5">R$ 31.500 · Parado 18 dias</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs font-bold text-nectar">54%</div>
+                  <div class="w-8 h-1 bg-light/10 rounded mt-1.5 overflow-hidden"><div class="h-full bg-nectar rounded" style="width:54%"></div></div>
+                </div>
+              </div>
+              <!-- Deal 3 -->
+              <div class="flex items-center gap-3 bg-dark-soft rounded-2xl p-3.5 border border-red-400/15">
+                <div class="w-8 h-8 rounded-xl bg-red-400/10 flex items-center justify-center text-sm flex-shrink-0">🔴</div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-semibold text-light">Soluções Beta S.A.</div>
+                  <div class="text-[0.6rem] text-light/40 mt-0.5">R$ 28.200 · Alto risco de perda</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs font-bold text-red-400">21%</div>
+                  <div class="w-8 h-1 bg-light/10 rounded mt-1.5 overflow-hidden"><div class="h-full bg-red-400 rounded" style="width:21%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Content -->
+        <div class="flex flex-col justify-center items-start lg:pr-12">
+          <p class="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-nectar/80 mb-4">Funcionalidade 03</p>
+          <h3 class="text-4xl lg:text-5xl font-black tracking-tightest text-light mb-6 leading-[1.0]">
+            Sales Intel &<br/><span class="gradient-text">Deal Coach</span>
+          </h3>
+          <p class="text-base text-light/55 leading-relaxed font-normal mb-6 max-w-lg">
+            Monitora oportunidades paradas, detecta sinais de risco antes que seja tarde, sugere ações concretas e prevê a probabilidade de fechamento de cada deal.
+          </p>
+          <ul class="flex flex-col gap-3">
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Alertas de oportunidades em risco</li>
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Sugestões de próximos passos contextualizados</li>
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Score preditivo de fechamento por deal</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Feature 4: Agente Multicanal ─── -->
+      <div class="group grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-center reveal">
+        <!-- Content -->
+        <div class="flex flex-col justify-center items-start order-2 lg:order-1">
+          <p class="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-nectar/80 mb-4">Funcionalidade 04</p>
+          <h3 class="text-4xl lg:text-5xl font-black tracking-tightest text-light mb-6 leading-[1.0]">
+            Agente<br/><span class="gradient-text">Multicanal</span>
+          </h3>
+          <p class="text-base text-light/55 leading-relaxed font-normal mb-6 max-w-lg">
+            Usa o seu vocabulário para interagir com leads por e-mail, WhatsApp e LinkedIn. Para ações de alto impacto, pede sua aprovação antes de enviar. Você sempre no controle.
+          </p>
+          <ul class="flex flex-col gap-3 mb-6">
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Comunicação no seu tom de voz</li>
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>WhatsApp, e-mail e LinkedIn integrados</li>
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Aprovação humana antes de ações críticas</li>
+          </ul>
+          <div class="flex gap-2 flex-wrap">
+            <span class="text-[0.65rem] font-bold uppercase tracking-widest text-green-400 bg-green-400/10 border border-green-400/20 px-3 py-1.5 rounded-full">● WhatsApp</span>
+            <span class="text-[0.65rem] font-bold uppercase tracking-widest text-nectar bg-nectar/10 border border-nectar/20 px-3 py-1.5 rounded-full">● E-mail</span>
+            <span class="text-[0.65rem] font-bold uppercase tracking-widest text-purple-400 bg-purple-400/10 border border-purple-400/20 px-3 py-1.5 rounded-full">● LinkedIn</span>
+          </div>
+        </div>
+        <!-- Visual -->
+        <div class="aspect-square lg:aspect-[4/3] overflow-hidden flex bg-dark-mid rounded-5xl relative shadow-inner items-center justify-center feature-card border border-light/7 order-1 lg:order-2">
+          <div class="absolute bottom-0 right-0 w-full h-[50%] bg-gradient-to-t from-green-500/5 to-transparent"></div>
+          <div class="w-[88%] transform group-hover:translate-y-[-6px] transition-transform duration-500 bg-dark rounded-3xl border border-light/10 shadow-2xl p-5">
+            <div class="text-[0.6rem] font-bold uppercase tracking-widest text-light/30 mb-4">Agente: Aprovação Pendente</div>
+            <div class="bg-dark-soft border border-nectar/20 rounded-2xl p-4 mb-4">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-[0.6rem] font-bold uppercase tracking-widest text-nectar bg-nectar/10 px-2.5 py-1 rounded-full">WhatsApp</span>
+                <span class="text-xs font-semibold text-light">Para: Carlos Mendes</span>
+              </div>
+              <p class="text-xs text-light/60 leading-relaxed mb-4">"Oi Carlos! Passando para dar um alô sobre nossa proposta. Tenho 20 min esta semana para tirar dúvidas?"</p>
+              <div class="flex gap-2">
+                <button class="flex-1 bg-nectar text-dark text-[0.65rem] font-bold uppercase tracking-widest py-2 rounded-xl">✓ Aprovar</button>
+                <button class="flex-1 bg-light/7 border border-light/10 text-light/60 text-[0.65rem] font-bold uppercase tracking-widest py-2 rounded-xl">✎ Editar</button>
+              </div>
+            </div>
+            <div class="text-[0.6rem] font-semibold text-light/30 text-center">Você sempre tem a palavra final</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 5: Forecast ──────────── -->
+      <div class="group grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-center reveal">
+        <!-- Visual -->
+        <div class="aspect-square lg:aspect-[4/3] overflow-hidden flex bg-dark-mid rounded-5xl relative shadow-inner items-center justify-center feature-card border border-light/7">
+          <div class="absolute top-1/3 right-1/4 w-[50%] h-[50%] bg-nectar/6 rounded-full blur-[80px]"></div>
+          <div class="w-[88%] transform group-hover:translate-y-[-6px] transition-transform duration-500 bg-dark rounded-3xl border border-light/10 shadow-2xl p-5">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <div class="text-[0.55rem] font-bold uppercase tracking-widest text-light/30 mb-1">Previsão Q2 2025</div>
+                <div class="text-xl font-black text-light">R$ 287.400</div>
+              </div>
+              <span class="text-[0.6rem] font-bold text-green-400 bg-green-400/10 border border-green-400/20 px-2.5 py-1 rounded-full">↑ +23% vs Q1</span>
+            </div>
+            <!-- Bars -->
+            <div class="flex gap-1.5 items-end h-16 mb-2">
+              <div class="flex-1 rounded-t-md bg-light/8" style="height:40%"></div>
+              <div class="flex-1 rounded-t-md bg-light/8" style="height:55%"></div>
+              <div class="flex-1 rounded-t-md bg-light/8" style="height:45%"></div>
+              <div class="flex-1 rounded-t-md bg-light/8" style="height:70%"></div>
+              <div class="flex-1 rounded-t-md" style="height:90%; background: linear-gradient(180deg,#FEA81F,rgba(254,168,31,0.3))"></div>
+              <div class="flex-1 rounded-t-md bg-light/5" style="height:60%"></div>
+            </div>
+            <div class="flex justify-between mb-5">
+              <span class="text-[0.55rem] text-light/25">Jan</span><span class="text-[0.55rem] text-light/25">Fev</span><span class="text-[0.55rem] text-light/25">Mar</span><span class="text-[0.55rem] text-light/25">Abr</span><span class="text-[0.55rem] font-bold text-nectar">Mai▲</span><span class="text-[0.55rem] text-light/25">Jun</span>
+            </div>
+            <!-- Alerts -->
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center gap-2.5 text-[0.65rem] text-light/50 bg-dark-soft rounded-xl px-3 py-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0"></span>
+                Concorrente A reduziu preço 12% esta semana
+              </div>
+              <div class="flex items-center gap-2.5 text-[0.65rem] text-light/50 bg-dark-soft rounded-xl px-3 py-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-nectar flex-shrink-0"></span>
+                Reunião com Meridian amanhã, briefing pronto
+              </div>
+              <div class="flex items-center gap-2.5 text-[0.65rem] text-light/50 bg-dark-soft rounded-xl px-3 py-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0"></span>
+                5 deals com alta probabilidade de fechar esta semana
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Content -->
+        <div class="flex flex-col justify-center items-start lg:pr-12">
+          <p class="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-nectar/80 mb-4">Funcionalidade 05</p>
+          <h3 class="text-4xl lg:text-5xl font-black tracking-tightest text-light mb-6 leading-[1.0]">
+            Forecast +<br/><span class="gradient-text">Intel. Competitiva</span>
+          </h3>
+          <p class="text-base text-light/55 leading-relaxed font-normal mb-6 max-w-lg">
+            Previsão de receita com base nas oportunidades do Deal Coach. Alertas sobre concorrentes, timing de mercado e briefing completo para chegar preparado em cada reunião.
+          </p>
+          <ul class="flex flex-col gap-3">
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Previsão de receita com confiabilidade por deal</li>
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Alertas proativos de movimentos de concorrentes</li>
+            <li class="flex items-start gap-3 text-sm text-light/65"><span class="w-4 h-4 rounded-full bg-nectar/15 border border-nectar/30 flex-shrink-0 mt-0.5 flex items-center justify-center text-[8px] text-nectar">✓</span>Briefing automático antes de cada reunião</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── URGENCY — DARK ────────────────── -->
+  <section class="px-6 lg:px-12 xl:px-20 py-24 text-center relative overflow-hidden" style="background:#23252C;">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(254,168,31,0.07)_0%,transparent_65%)] pointer-events-none"></div>
+    <div class="relative z-10">
+      <h2 class="reveal text-5xl lg:text-6xl xl:text-7xl font-black tracking-tightest text-light leading-[0.95] mb-6">
+        Apenas <span class="gradient-text">50 vagas.</span><br/>Zero lista de espera.
+      </h2>
+      <p class="reveal delay-1 text-base lg:text-lg text-light/50 max-w-lg mx-auto mb-10">
+        Quando fechar, fecha. Não tem segunda chance, não tem lista de espera com prazo certo.
+      </p>
+      <!-- Counter -->
+      <div class="reveal delay-2 flex justify-center mb-10">
+        <div class="inline-flex items-center gap-6 bg-dark border border-nectar/25 rounded-3xl px-8 py-5 shadow-xl">
+          <div class="text-6xl font-black gradient-text">50</div>
+          <div class="text-left">
+            <div class="text-base font-bold text-light">vagas totais</div>
+            <div class="text-sm text-light/40">preenchendo agora</div>
+          </div>
+        </div>
+      </div>
+      <!-- Slot pips -->
+      <div id="slotPips" class="reveal delay-3 flex gap-1.5 flex-wrap justify-center max-w-sm mx-auto mb-10">
+        <!-- Filled by JS -->
+      </div>
+      <div class="reveal delay-4">
+        <a href="#form" class="btn-nectar inline-flex items-center gap-3 bg-nectar text-dark text-sm font-bold uppercase tracking-widest px-10 py-5 rounded-full shadow-xl shadow-nectar/30">
+          Garantir minha vaga agora
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── FORM — LIGHT ─────────────────── -->
+  <section id="form" class="px-4 lg:px-8 pb-8" style="background:#1A1C22;">
+    <div class="relative w-full rounded-4xl bg-[#23252C] border border-light/8 overflow-hidden px-6 py-16 md:px-16 md:py-20">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-20 bg-gradient-to-b from-nectar/40 to-transparent"></div>
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-1 bg-gradient-to-r from-transparent via-nectar/25 to-transparent"></div>
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-64 bg-nectar/5 blur-[100px] rounded-full pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-xl mx-auto">
+        <div class="text-center mb-12 reveal">
+          <h2 class="text-3xl md:text-4xl font-black tracking-tightest text-light mb-4">Garanta sua vaga<br/><span class="gradient-text">antes de todo mundo.</span></h2>
+          <p class="text-base text-light/50 max-w-md mx-auto">Preencha o formulário. Nossa equipe entrará em contato em até 24 horas para confirmar seu acesso.</p>
+        </div>
+
+        <!-- Form card -->
+        <div id="formCard" class="reveal delay-1 bg-[#1A1C22] border border-white/6 rounded-4xl p-8 shadow-2xl">
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <div class="text-xl font-black text-light tracking-tight">Cadastro Beta</div>
+              <div class="text-xs text-light/35 mt-0.5">Acesso exclusivo ao Nectar AI</div>
+            </div>
+            <span class="text-[0.6rem] font-bold text-red-400 bg-red-400/10 border border-red-400/20 px-2.5 py-1 rounded-full">50 vagas</span>
+          </div>
+
+          <form id="betaForm" onsubmit="handleSubmit(event)" class="flex flex-col gap-5">
+            <div>
+              <label class="block text-xs font-semibold text-light/40 mb-2 uppercase tracking-widest">Seu nome completo *</label>
+              <input type="text" name="nome" placeholder="João da Silva" required class="w-full bg-[#2C2F38] border border-white/8 rounded-2xl px-4 py-3.5 text-sm text-light placeholder:text-light/20 outline-none focus:border-nectar/50 focus:bg-[#353840] focus:shadow-lg focus:shadow-nectar/10 transition-all" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-light/40 mb-2 uppercase tracking-widest">E-mail corporativo *</label>
+              <input type="email" name="email" placeholder="joao@suaempresa.com.br" required class="w-full bg-[#2C2F38] border border-white/8 rounded-2xl px-4 py-3.5 text-sm text-light placeholder:text-light/20 outline-none focus:border-nectar/50 focus:bg-[#353840] focus:shadow-lg focus:shadow-nectar/10 transition-all" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-light/40 mb-2 uppercase tracking-widest">Nome da empresa *</label>
+              <input type="text" name="empresa" placeholder="Empresa LTDA" required class="w-full bg-[#2C2F38] border border-white/8 rounded-2xl px-4 py-3.5 text-sm text-light placeholder:text-light/20 outline-none focus:border-nectar/50 focus:bg-[#353840] focus:shadow-lg focus:shadow-nectar/10 transition-all" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-light/40 mb-2 uppercase tracking-widest">WhatsApp *</label>
+              <input type="tel" id="whatsapp" name="whatsapp" placeholder="(11) 99999-9999" required class="w-full bg-[#2C2F38] border border-white/8 rounded-2xl px-4 py-3.5 text-sm text-light placeholder:text-light/20 outline-none focus:border-nectar/50 focus:bg-[#353840] focus:shadow-lg focus:shadow-nectar/10 transition-all" />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-light/40 mb-2 uppercase tracking-widest">Cargo</label>
+                <select name="cargo" class="w-full bg-[#2C2F38] border border-white/8 rounded-2xl px-4 py-3.5 text-sm text-light outline-none focus:border-nectar/50 transition-all appearance-none cursor-pointer">
+                  <option value="" disabled selected>Selecione</option>
+                  <option>Diretor / CEO</option>
+                  <option>Gerente de Vendas</option>
+                  <option>Coord. Comercial</option>
+                  <option>Vendedor / SDR</option>
+                  <option>CS</option>
+                  <option>Marketing</option>
+                  <option>Outro</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-light/40 mb-2 uppercase tracking-widest">Time de vendas</label>
+                <select name="tamanho" class="w-full bg-[#2C2F38] border border-white/8 rounded-2xl px-4 py-3.5 text-sm text-light outline-none focus:border-nectar/50 transition-all appearance-none cursor-pointer">
+                  <option value="" disabled selected>Tamanho</option>
+                  <option>1–5 pessoas</option>
+                  <option>6–20 pessoas</option>
+                  <option>21–50 pessoas</option>
+                  <option>50+ pessoas</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn-nectar w-full bg-nectar text-dark text-sm font-bold uppercase tracking-widest py-4 rounded-2xl shadow-xl shadow-nectar/30 mt-2">
+              Quero ser Beta Tester
+            </button>
+          </form>
+
+          <div class="flex items-center justify-center gap-2 text-[0.65rem] text-light/20 mt-5">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Seus dados estão protegidos e não serão compartilhados
+          </div>
+        </div>
+
+        <!-- Success -->
+        <div id="formSuccess" class="hidden text-center py-16">
+          <div class="w-20 h-20 rounded-full bg-green-400/10 border-2 border-green-400 flex items-center justify-center mx-auto mb-6">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="text-2xl font-black tracking-tightest text-light mb-4">Inscrição confirmada!</h3>
+          <p class="text-base text-light/50 max-w-sm mx-auto">Nossa equipe de CS entrará em contato em até 24 horas para confirmar seu acesso ao programa beta. Fique de olho no seu e-mail.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER — DARK ────────────────── -->
+  <footer class="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 lg:px-12 py-8 border-t border-light/8" style="background:#23252C;">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 bg-nectar rounded-lg flex items-center justify-center">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M13 2L4.09 12.96H11L10 22L19.91 11.04H13L13 2Z" fill="#23252C"/></svg>
+      </div>
+      <span class="text-sm font-bold text-light">Nectar <span class="text-nectar">AI</span></span>
+    </div>
+    <p class="text-xs text-light/40 text-center">
+      &copy; 2025 NectarCRM. Programa Beta · Acesso Exclusivo para Clientes.
+    </p>
+    <span class="text-[0.65rem] font-semibold uppercase tracking-widest text-nectar/70">Beta · 2025</span>
+  </footer>
+
+</main>
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+═════════════════════════════════════════ -->
+<script>
+  // ── Cinematic scroll-driven animation ──
+  (function() {
+    var section    = document.getElementById('cin-section');
+    if (!section) return;
+    var cinTitle   = document.getElementById('cin-title');
+    var cinBoard   = document.getElementById('cin-board');
+    var cinPanel   = document.getElementById('cin-ai-panel');
+    var cinStatus  = document.getElementById('cin-ai-status');
+    var cinGlow    = document.getElementById('cin-glow-pulse');
+    var cinBadges  = document.querySelectorAll('.cin-ai-badge');
+    var cinIns1    = document.getElementById('cin-ins-1');
+    var cinIns2    = document.getElementById('cin-ins-2');
+    var cinIns3    = document.getElementById('cin-ins-3');
+
+    function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+    function clamp(v,a,b) { return v<a?a:v>b?b:v; }
+    function prog(p,a,b) { return ease(clamp((p-a)/(b-a),0,1)); }
+
+    function updateCin() {
+      var rect = section.getBoundingClientRect();
+      var scrollable = section.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      var p = clamp(-rect.top / scrollable, 0, 1);
+
+      // TITLE: visible at top, fade-out 0.28→0.43
+      var tOut = prog(p, 0.28, 0.43);
+      cinTitle.style.opacity   = 1 - tOut;
+      cinTitle.style.transform = 'translateY(' + (-tOut*18) + 'px)';
+
+      // BOARD: slide down from -60px at 0.33→0.52
+      var bP = prog(p, 0.33, 0.52);
+      cinBoard.style.opacity   = bP;
+      cinBoard.style.transform = 'translateY(' + ((1-bP)*-60) + 'px)';
+
+      // AI INSIGHTS staggered: appear as board slides in
+      var i1p = prog(p, 0.46, 0.56);
+      cinIns1.style.opacity   = i1p;
+      cinIns1.style.transform = 'translateX(' + ((1-i1p)*12) + 'px)';
+
+      var i2p = prog(p, 0.50, 0.60);
+      cinIns2.style.opacity   = i2p;
+      cinIns2.style.transform = 'translateX(' + (-(1-i2p)*12) + 'px)';
+
+      var i3p = prog(p, 0.54, 0.64);
+      cinIns3.style.opacity   = i3p;
+      cinIns3.style.transform = 'translateY(' + ((1-i3p)*12) + 'px)';
+
+      // AI STATUS badge: 0.54→0.65
+      cinStatus.style.opacity = prog(p, 0.54, 0.65);
+
+      // GLOW PULSE: 0.57→0.70
+      cinGlow.style.opacity = prog(p, 0.57, 0.70) * 0.75;
+
+      // AI BADGES staggered: 0.62 + i*0.025
+      cinBadges.forEach(function(badge, i) {
+        var s = 0.62 + i * 0.025;
+        var bp = prog(p, s, s + 0.1);
+        badge.style.opacity   = bp;
+        badge.style.transform = 'scale(' + (0.7 + 0.3*bp) + ')';
+      });
+
+      // AI PANEL: 0.83→0.95
+      var pp = prog(p, 0.83, 0.95);
+      cinPanel.style.opacity   = pp;
+      cinPanel.style.transform = 'translateX(-50%) translateY(' + ((1-pp)*20) + 'px)';
+    }
+
+    window.addEventListener('scroll', updateCin, { passive: true });
+    updateCin();
+  })();
+
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  const navbarLogoText = document.getElementById('navbarLogoText');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      navbar.style.background = 'rgba(35,37,44,0.92)';
+      navbar.style.backdropFilter = 'blur(20px)';
+      navbar.style.borderBottom = '1px solid rgba(243,243,244,0.07)';
+      navbarLogoText.style.color = '#F3F3F4';
+    } else {
+      navbar.style.background = 'rgba(35,37,44,0.0)';
+      navbar.style.backdropFilter = 'none';
+      navbar.style.borderBottom = 'none';
+      navbarLogoText.style.color = '#F3F3F4';
+    }
+  }, { passive: true });
+
+  // Intersection observer
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Build slot pips
+  const pipsContainer = document.getElementById('slotPips');
+  for (let i = 0; i < 50; i++) {
+    const pip = document.createElement('span');
+    const filled = i < 30;
+    pip.className = `w-3 h-3 rounded-sm ${filled ? 'bg-nectar' : 'bg-white/10 border border-white/12'}`;
+    if (filled) {
+      pip.style.animationDelay = `${800 + i * 30}ms`;
+      pip.classList.add('slot-fill');
+    }
+    pipsContainer.appendChild(pip);
+  }
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('formCard').style.display = 'none';
+    const success = document.getElementById('formSuccess');
+    success.classList.remove('hidden');
+    success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Phone mask
+  document.getElementById('whatsapp').addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '').substring(0, 11);
+    if (v.length >= 7) v = `(${v.substring(0,2)}) ${v.substring(2,7)}-${v.substring(7)}`;
+    else if (v.length >= 3) v = `(${v.substring(0,2)}) ${v.substring(2)}`;
+    e.target.value = v;
+  });
+</script>
+</body>
+</html>

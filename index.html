@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nomus ERP — Pare de administrar o caos. Comece a controlar sua fábrica de verdade.</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --bg-base:    #070d1a;
+    --bg-surface: #0d1525;
+    --bg-card:    #111c30;
+    --border:     rgba(255,255,255,0.07);
+    --border-mid: rgba(255,255,255,0.12);
+    --blue:       #043AAA;
+    --blue-light: #4DA0E8;
+    --text-muted: #8b9db8;
+    --text-dim:   #4e6080;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: "DM Sans", sans-serif; background: var(--bg-base); color: #e2e8f0; overflow-x: hidden; }
+  h1,h2,h3,h4,h5,h6 { font-family: "Plus Jakarta Sans", sans-serif; }
+  select { appearance: none; -webkit-appearance: none; }
+
+  /* Glow effects */
+  .glow-blue { box-shadow: 0 0 40px rgba(4,58,170,0.25); }
+  .glow-sm   { box-shadow: 0 0 20px rgba(77,160,232,0.15); }
+
+  /* Urgency bar gradient */
+  .urgency-bar { background: linear-gradient(90deg, #043AAA 0%, #2563eb 50%, #043AAA 100%); }
+
+  /* Nav blur */
+  .nav-blur { background: rgba(7,13,26,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+
+  /* Dark cards */
+  .card-dark { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; }
+  .card-dark-mid { background: var(--bg-card); border: 1px solid var(--border-mid); border-radius: 1rem; }
+
+  /* Pill button */
+  .btn-primary { background: var(--blue); color: #fff; font-weight: 700; border-radius: 9999px; padding: 0.75rem 1.75rem; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem; }
+  .btn-primary:hover { background: #0540cc; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(4,58,170,0.4); }
+  .btn-secondary { background: transparent; color: #e2e8f0; font-weight: 600; border-radius: 9999px; padding: 0.75rem 1.75rem; border: 1px solid var(--border-mid); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem; }
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); }
+
+  /* Form inputs in dark style */
+  .form-input-dark {
+    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border-mid);
+    border-radius: 0.625rem; padding: 0.65rem 1rem; font-size: 0.875rem; color: #e2e8f0;
+    transition: border-color 0.2s;
+  }
+  .form-input-dark::placeholder { color: var(--text-dim); }
+  .form-input-dark:focus { outline: none; border-color: var(--blue-light); background: rgba(77,160,232,0.06); }
+  .form-input-dark option { background: #0d1525; color: #e2e8f0; }
+
+  /* Badge pill */
+  .badge { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(4,58,170,0.15); border: 1px solid rgba(77,160,232,0.25); color: #4DA0E8; border-radius: 9999px; padding: 0.3rem 0.85rem; }
+  .badge-dot { width: 6px; height: 6px; border-radius: 9999px; background: #4DA0E8; animation: pulse-dot 2s infinite; }
+  @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+  /* Section label */
+  .section-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue-light); }
+
+  /* Divider line */
+  .line-divider { border: none; border-top: 1px solid var(--border); }
+
+  /* FAQ */
+  .faq-answer { display: none; }
+  .faq-item.open .faq-answer { display: block; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-icon { transition: transform 0.2s; }
+
+  /* Periodo radio */
+  .periodo-opt { border: 1px solid var(--border-mid); border-radius: 0.625rem; padding: 0.6rem 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); cursor: pointer; background: rgba(255,255,255,0.03); transition: all 0.15s; text-align: center; }
+  .periodo-opt:hover { border-color: rgba(77,160,232,0.4); }
+
+  /* Stat number */
+  .stat-num { font-family: "Plus Jakarta Sans", sans-serif; font-size: 2rem; font-weight: 800; color: #fff; }
+
+  /* Noise overlay for hero */
+  .noise::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; border-radius: inherit;
+  }
+
+  /* Mobile menu */
+  #mob-menu { background: rgba(7,13,26,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+
+  /* Gradient text */
+  .grad-text { background: linear-gradient(135deg, #fff 0%, #4DA0E8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  /* Shimmer line hero */
+  .shimmer-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #043AAA 30%, #4DA0E8 50%, #043AAA 70%, transparent 100%);
+    opacity: 0.6;
+  }
+
+  /* Card "antes" */
+  .card-antes { background: rgba(239,68,68,0.04); border: 1px solid rgba(239,68,68,0.15); border-radius: 1rem; }
+  /* Card "depois" */
+  .card-depois { background: rgba(4,58,170,0.06); border: 1px solid rgba(77,160,232,0.2); border-radius: 1rem; }
+
+  /* Gradient section */
+  .section-gradient { background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-surface) 50%, var(--bg-base) 100%); }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════
+     URGENCY BAR
+════════════════════════════════ -->
+<div class="urgency-bar text-white text-xs font-semibold py-2 px-4 text-center tracking-wide">
+  ⚠️ &nbsp; REFORMA TRIBUTÁRIA EM VIGOR — Sua indústria já está adequada? A Nomus já está. &nbsp;
+  <a href="#cta-final" class="underline text-blue-200 hover:text-white transition-colors">Saiba mais →</a>
+</div>
+
+<!-- ════════════════════════════════
+     NAV
+════════════════════════════════ -->
+<nav class="nav-blur w-full h-18 flex items-center justify-between px-6 lg:px-16 py-4 sticky top-0 z-50">
+  <span class="text-white font-extrabold text-xl tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif">
+    NOMUS <span style="color:#4DA0E8">ERP</span>
+  </span>
+
+  <div class="hidden md:flex text-sm font-medium gap-x-8" style="color:var(--text-muted)">
+    <a class="hover:text-white transition-colors" href="#dores">O Problema</a>
+    <a class="hover:text-white transition-colors" href="#metodo">Método</a>
+    <a class="hover:text-white transition-colors" href="#diferenciais">Diferenciais</a>
+    <a class="hover:text-white transition-colors" href="#faq">FAQ</a>
+  </div>
+
+  <a href="#cta-final" class="hidden md:inline-flex btn-primary text-xs tracking-wider uppercase">
+    Falar com especialista →
+  </a>
+
+  <button onclick="document.getElementById('mob-menu').classList.toggle('hidden')" class="md:hidden text-slate-400 hover:text-white">
+    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mob-menu" class="hidden md:hidden px-6 py-6 flex flex-col gap-4 z-40">
+  <a href="#dores" onclick="document.getElementById('mob-menu').classList.add('hidden')" class="text-slate-300 font-medium border-b pb-3" style="border-color:var(--border)">O Problema</a>
+  <a href="#metodo" onclick="document.getElementById('mob-menu').classList.add('hidden')" class="text-slate-300 font-medium border-b pb-3" style="border-color:var(--border)">Método</a>
+  <a href="#diferenciais" onclick="document.getElementById('mob-menu').classList.add('hidden')" class="text-slate-300 font-medium border-b pb-3" style="border-color:var(--border)">Diferenciais</a>
+  <a href="#faq" onclick="document.getElementById('mob-menu').classList.add('hidden')" class="text-slate-300 font-medium border-b pb-3" style="border-color:var(--border)">FAQ</a>
+  <a href="#cta-final" class="btn-primary text-center text-sm justify-center">Falar com especialista</a>
+</div>
+
+<!-- ════════════════════════════════
+     HERO
+════════════════════════════════ -->
+<section class="relative pt-20 pb-0 px-6 lg:px-16 overflow-hidden" style="background:var(--bg-base)">
+
+  <!-- Background radial glow -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full opacity-20 pointer-events-none" style="background:radial-gradient(ellipse at center, #043AAA 0%, transparent 70%); filter:blur(60px);"></div>
+
+  <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-start relative z-10">
+
+    <!-- LEFT -->
+    <div class="flex flex-col justify-center pt-8 lg:pt-16 pb-16">
+
+      <!-- Social proof badge -->
+      <div class="flex items-center gap-3 mb-7">
+        <div class="flex -space-x-2">
+          <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold text-white" style="background:#043AAA;border-color:var(--bg-base)">R</div>
+          <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold text-white" style="background:#4DA0E8;border-color:var(--bg-base)">M</div>
+          <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold text-white" style="background:#334155;border-color:var(--bg-base)">J</div>
+        </div>
+        <p class="text-xs" style="color:var(--text-muted)"><span class="font-bold text-white">+800 donos de indústria</span> já têm controle total da fábrica</p>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="text-4xl lg:text-5xl xl:text-[3.2rem] font-extrabold text-white tracking-tight leading-[1.1] mb-5">
+        Tenha integração entre<br/>
+        <span class="grad-text">vendas e produção</span><br/>
+        na sua Indústria com um ERP<br/>
+        <span style="color:var(--text-muted);font-weight:600">que vai automatizar a comunicação entre áreas.</span>
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="text-lg leading-relaxed max-w-lg mb-7" style="color:var(--text-muted)">
+        A Nomus integra produção, estoque e comercial num único sistema para que você pare de apagar incêndio e comece a crescer de forma planejada.
+      </p>
+
+      <!-- Bullets -->
+      <div class="card-dark p-5 mb-7">
+        <p class="section-label mb-4">Como nosso ERP vai transformar a sua indústria</p>
+        <div class="grid grid-cols-1 gap-3.5">
+          <div class="flex items-start gap-3">
+            <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(4,58,170,0.3);border:1px solid rgba(77,160,232,0.4)">
+              <svg width="10" height="10" fill="none" stroke="#4DA0E8" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <p class="text-sm text-slate-300">Prazo prometido para o cliente = prazo entregue. Sem surpresa na produção</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(4,58,170,0.3);border:1px solid rgba(77,160,232,0.4)">
+              <svg width="10" height="10" fill="none" stroke="#4DA0E8" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <p class="text-sm text-slate-300">Você sabe o custo real de cada produto, nunca mais vende no prejuízo sem saber</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(4,58,170,0.3);border:1px solid rgba(77,160,232,0.4)">
+              <svg width="10" height="10" fill="none" stroke="#4DA0E8" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <p class="text-sm text-slate-300">Dashboard em tempo real no celular, você gerencia a fábrica de onde estiver</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-3 card-dark overflow-hidden mb-6">
+        <div class="p-4 text-center">
+          <div class="stat-num">+800</div>
+          <div class="text-xs mt-0.5" style="color:var(--text-muted)">Indústrias</div>
+        </div>
+        <div class="p-4 text-center" style="border-left:1px solid var(--border)">
+          <div class="stat-num">55+</div>
+          <div class="text-xs mt-0.5" style="color:var(--text-muted)">Cases de sucesso</div>
+        </div>
+        <div class="p-4 text-center" style="border-left:1px solid var(--border)">
+          <div class="stat-num">15</div>
+          <div class="text-xs mt-0.5" style="color:var(--text-muted)">Anos</div>
+        </div>
+      </div>
+
+      <!-- Risk reversal -->
+      <div class="flex items-center gap-2 text-xs" style="color:var(--text-muted)">
+        <svg width="14" height="14" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Implantação sem parar a produção &nbsp;•&nbsp; Suporte especialista &nbsp;•&nbsp; Sem risco</span>
+      </div>
+    </div>
+
+    <!-- RIGHT — Form -->
+    <div class="flex flex-col justify-center py-8 lg:py-16">
+      <div class="max-w-md w-full mx-auto">
+        <div class="badge mb-4"><span class="badge-dot"></span> Sem compromisso</div>
+        <h2 class="text-xl font-bold text-white mb-1">Fale com um especialista em ERP para indústrias</h2>
+        <p class="text-sm mb-5" style="color:var(--text-muted)">Um especialista entra em contato em até 24h.</p>
+
+        <div class="card-dark-mid p-6">
+          <form id="nomus-form" novalidate>
+
+            <div class="mb-4">
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Nome <span style="color:#4DA0E8">*</span></label>
+              <input type="text" name="nome" placeholder="Seu nome completo" required class="form-input-dark"/>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Email <span style="color:#4DA0E8">*</span></label>
+              <input type="email" name="email" placeholder="seu@email.com.br" required class="form-input-dark"/>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Empresa <span style="color:#4DA0E8">*</span></label>
+              <input type="text" name="empresa" placeholder="Nome da sua empresa" required class="form-input-dark"/>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Seu cargo <span style="color:#4DA0E8">*</span></label>
+              <div class="relative">
+                <select name="cargo" required class="form-input-dark pr-9">
+                  <option value="" disabled selected>Selecione</option>
+                  <option>Estudante</option><option>Estagiário</option><option>Trainee</option>
+                  <option>Auxiliar</option><option>Técnico</option><option>Assistente</option>
+                  <option>Operador</option><option>Analista</option><option>Controller</option>
+                  <option>Supervisor</option><option>Coordenador</option><option>Gerente</option>
+                  <option>Diretor</option><option>CEO / Sócio</option><option>Consultor</option><option>Outros</option>
+                </select>
+                <div class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style="color:var(--text-dim)">
+                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Setor da sua empresa <span style="color:#4DA0E8">*</span></label>
+              <div class="relative">
+                <select name="setor" required class="form-input-dark pr-9">
+                  <option value="" disabled selected>Selecione</option>
+                  <option>Alimentos e Bebidas (CNAEs 10 e 11)</option>
+                  <option>Metalurgia e Metal Mecânico (CNAEs 24 e 25)</option>
+                  <option>Máquinas e equipamentos (CNAEs 28 e 33)</option>
+                  <option>Plásticos e borracha (CNAE 22)</option>
+                  <option>Farmacêutico (CNAE 21)</option>
+                  <option>Têxtil e vestuário (CNAEs 13, 14 e 15)</option>
+                  <option>Elétrico e eletrônico (CNAEs 26 e 27)</option>
+                  <option>Móveis e madeira (CNAEs 31 e 16)</option>
+                  <option>Química (CNAEs 19 e 20)</option>
+                  <option>Automotivo, náutico, aeronáutico (CNAEs 29 e 30)</option>
+                  <option>Gráfica (CNAE 18)</option>
+                  <option>Meu segmento não está na lista acima</option>
+                  <option>Não trabalho atualmente</option>
+                </select>
+                <div class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style="color:var(--text-dim)">
+                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Telefone <span style="color:#4DA0E8">*</span></label>
+              <input type="tel" name="telefone" id="tel" placeholder="(00) 00000-0000" required class="form-input-dark"/>
+            </div>
+
+            <div class="mb-6">
+              <label class="block text-xs font-semibold text-slate-300 mb-2">Melhor período para contato <span style="color:#4DA0E8">*</span></label>
+              <div class="grid grid-cols-3 gap-2">
+                <label class="periodo-opt periodo-option"><input type="radio" name="periodo" value="Manhã" class="sr-only" required/> ☀️ Manhã</label>
+                <label class="periodo-opt periodo-option"><input type="radio" name="periodo" value="Tarde" class="sr-only"/> 🌤 Tarde</label>
+                <label class="periodo-opt periodo-option"><input type="radio" name="periodo" value="Noite" class="sr-only"/> 🌙 Noite</label>
+              </div>
+            </div>
+
+            <div id="form-error" class="hidden mb-4 rounded-lg px-4 py-3 text-xs" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#f87171">
+              Por favor, preencha todos os campos obrigatórios.
+            </div>
+            <div id="form-success" class="hidden mb-4 rounded-lg px-4 py-3 text-xs" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#4ade80">
+              ✓ Recebemos sua solicitação! Um especialista entrará em contato em breve.
+            </div>
+
+            <button type="submit" class="btn-primary w-full justify-center text-sm py-3.5">
+              Falar com especialista →
+            </button>
+          </form>
+        </div>
+        <p class="text-xs text-center mt-3" style="color:var(--text-dim)">🔒 Seus dados estão seguros e protegidos</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Shimmer line at bottom of hero -->
+  <div class="shimmer-line w-full mt-0"></div>
+</section>
+
+<!-- ════════════════════════════════
+     DORES — Antes vs Depois
+════════════════════════════════ -->
+<section id="dores" class="py-24 px-6 lg:px-16 section-gradient">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="text-center mb-16">
+      <div class="badge mx-auto mb-4">Antes vs. Depois</div>
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4 max-w-2xl mx-auto leading-tight">A diferença entre operar no escuro e ter controle total</h2>
+      <p class="text-base max-w-xl mx-auto" style="color:var(--text-muted)">Dois cenários. Um é onde você está agora. O outro é onde você vai estar em 6 meses.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6 mb-12">
+
+      <!-- CARD ANTES -->
+      <div class="card-antes overflow-hidden">
+        <div class="px-6 py-4 flex items-center gap-3" style="background:rgba(239,68,68,0.06);border-bottom:1px solid rgba(239,68,68,0.12)">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3)">
+            <svg width="14" height="14" fill="none" stroke="#ef4444" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </div>
+          <div>
+            <p class="font-bold text-white text-sm">Sua fábrica HOJE</p>
+            <p class="text-xs" style="color:#f87171">Operando no escuro</p>
+          </div>
+        </div>
+        <div class="p-6 flex flex-col gap-5">
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15)">
+              <svg width="20" height="20" fill="none" stroke="#f87171" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div>
+              <p class="font-bold text-white text-sm mb-1">Comercial e produção vivem em guerra</p>
+              <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Vendas promete prazo que a fábrica não consegue cumprir. O cliente cobra você. Você corre apagar incêndio.</p>
+            </div>
+          </div>
+          <hr class="line-divider"/>
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15)">
+              <svg width="20" height="20" fill="none" stroke="#f87171" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+            <div>
+              <p class="font-bold text-white text-sm mb-1">Decisões tomadas no escuro</p>
+              <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Você não sabe se está vendendo com lucro ou prejuízo. Os dados estão em planilhas que só você sabe costurar.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD DEPOIS -->
+      <div class="card-depois overflow-hidden">
+        <div class="px-6 py-4 flex items-center gap-3" style="background:rgba(4,58,170,0.08);border-bottom:1px solid rgba(77,160,232,0.15)">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#043AAA;border:1px solid rgba(77,160,232,0.4)">
+            <svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <div>
+            <p class="font-bold text-white text-sm">Sua fábrica com a NOMUS</p>
+            <p class="text-xs" style="color:#4DA0E8">Controle total em tempo real</p>
+          </div>
+        </div>
+        <div class="p-6 flex flex-col gap-5">
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(4,58,170,0.15);border:1px solid rgba(77,160,232,0.2)">
+              <svg width="20" height="20" fill="none" stroke="#4DA0E8" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div>
+              <p class="font-bold text-white text-sm mb-1">Comercial só vende o que a produção entrega</p>
+              <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Prazo prometido é prazo cumprido. Todos falam a mesma língua dentro do mesmo sistema, em tempo real.</p>
+            </div>
+          </div>
+          <hr class="line-divider"/>
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(4,58,170,0.15);border:1px solid rgba(77,160,232,0.2)">
+              <svg width="20" height="20" fill="none" stroke="#4DA0E8" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+            <div>
+              <p class="font-bold text-white text-sm mb-1">Dashboard com o custo real de cada produto</p>
+              <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Você abre o celular de qualquer lugar e vê a fábrica inteira. Decide com dado. Não com feeling.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center">
+      <a href="#cta-final" class="btn-primary text-sm px-8 py-4">
+        Quero controlar minha fábrica assim →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     AUTORIDADE / DIFERENCIAIS
+════════════════════════════════ -->
+<section id="diferenciais" class="py-24 px-6 lg:px-16 relative overflow-hidden" style="background:var(--bg-surface)">
+
+  <!-- Background glow -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] pointer-events-none opacity-10" style="background:radial-gradient(ellipse at center, #043AAA 0%, transparent 70%); filter:blur(80px);"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="section-label mb-4">Nossa Origem</div>
+    <h2 class="text-3xl lg:text-4xl font-bold text-white mb-5 max-w-3xl leading-tight">Não somos mais um software de gestão.<br/>Somos o ERP que nasceu dentro da indústria.</h2>
+    <p class="text-lg max-w-2xl mb-14" style="color:var(--text-muted)">A Nomus foi fundada por engenheiros de produção. Nasceu como sistema de controle de produção numa época em que as únicas soluções custavam milhões de dólares e eram feitas para gigantes.</p>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-4 mb-16">
+      <div class="card-dark p-6 text-center">
+        <div class="stat-num mb-1">+800</div>
+        <div class="text-xs" style="color:var(--blue-light)">Indústrias transformadas</div>
+      </div>
+      <div class="card-dark p-6 text-center">
+        <div class="stat-num mb-1">55+</div>
+        <div class="text-xs" style="color:var(--blue-light)">Cases de sucesso em vídeo</div>
+      </div>
+      <div class="card-dark p-6 text-center">
+        <div class="stat-num mb-1">15</div>
+        <div class="text-xs" style="color:var(--blue-light)">Anos de mercado industrial</div>
+      </div>
+    </div>
+
+    <!-- Testimonials -->
+    <div class="section-label mb-6">O que nossos clientes dizem</div>
+    <div class="grid lg:grid-cols-3 gap-5 mb-12">
+
+      <div class="card-dark overflow-hidden">
+        <div class="relative w-full bg-black/40 flex items-center justify-center rounded-t-2xl overflow-hidden" style="aspect-ratio:16/9">
+          <div class="absolute inset-0 flex flex-col items-center justify-center gap-2" style="background:rgba(13,21,37,0.8)">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15)">
+              <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <p class="text-xs font-mono uppercase tracking-widest" style="color:rgba(255,255,255,0.3)">Adicionar vídeo</p>
+          </div>
+        </div>
+        <div class="p-5">
+          <p class="text-sm leading-relaxed mb-4 italic" style="color:#94a3b8">"Antes da Nomus, minha produção era um caos. Hoje abro o sistema e em 5 minutos sei exatamente o que está acontecendo na fábrica, de qualquer lugar."</p>
+          <hr class="line-divider mb-3"/>
+          <p class="text-white font-semibold text-sm">[Nome do cliente]</p>
+          <p class="text-xs mt-0.5" style="color:var(--blue-light)">Diretor Industrial</p>
+        </div>
+      </div>
+
+      <div class="card-dark overflow-hidden">
+        <div class="relative w-full flex items-center justify-center rounded-t-2xl overflow-hidden" style="aspect-ratio:16/9;background:rgba(13,21,37,0.8)">
+          <div class="absolute inset-0 flex flex-col items-center justify-center gap-2">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15)">
+              <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <p class="text-xs font-mono uppercase tracking-widest" style="color:rgba(255,255,255,0.3)">Adicionar vídeo</p>
+          </div>
+        </div>
+        <div class="p-5">
+          <p class="text-sm leading-relaxed mb-4 italic" style="color:#94a3b8">"Tentei outros dois ERPs antes. Nenhum entendia de indústria. O suporte da Nomus fala a língua do chão de fábrica. Nunca mais troquei."</p>
+          <hr class="line-divider mb-3"/>
+          <p class="text-white font-semibold text-sm">[Nome do cliente]</p>
+          <p class="text-xs mt-0.5" style="color:var(--blue-light)">Sócio</p>
+        </div>
+      </div>
+
+      <div class="card-dark overflow-hidden">
+        <div class="relative w-full flex items-center justify-center rounded-t-2xl overflow-hidden" style="aspect-ratio:16/9;background:rgba(13,21,37,0.8)">
+          <div class="absolute inset-0 flex flex-col items-center justify-center gap-2">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15)">
+              <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <p class="text-xs font-mono uppercase tracking-widest" style="color:rgba(255,255,255,0.3)">Adicionar vídeo</p>
+          </div>
+        </div>
+        <div class="p-5">
+          <p class="text-sm leading-relaxed mb-4 italic" style="color:#94a3b8">"Perdi um contrato grande por falta de rastreabilidade. Foi a última vez. Com a Nomus, atendo qualquer exigência de ISO 9001 sem estresse."</p>
+          <hr class="line-divider mb-3"/>
+          <p class="text-white font-semibold text-sm">[Nome do cliente]</p>
+          <p class="text-xs mt-0.5" style="color:var(--blue-light)">Gestor Industrial</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center">
+      <a href="#cta-final" class="btn-primary text-sm px-8 py-4">
+        Quero ser o próximo case de sucesso →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     MÉTODO
+════════════════════════════════ -->
+<section id="metodo" class="py-24 px-6 lg:px-16" style="background:var(--bg-base)">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-14">
+      <div class="badge mx-auto mb-4">Método Fábrica Integrada</div>
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">Como a Nomus transforma sua indústria em 4 a 6 meses</h2>
+      <p class="text-lg" style="color:var(--text-muted)">O método que já funcionou em mais de 800 indústrias brasileiras</p>
+    </div>
+
+    <div class="grid lg:grid-cols-4 gap-5 mb-12">
+
+      <div class="card-dark p-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </div>
+        <p class="section-label mb-2">Semana 1–2</p>
+        <h3 class="font-bold text-white mb-2">Diagnóstico e Setup</h3>
+        <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Nosso time entra na sua operação, mapeia processos e configura o sistema para a realidade da sua indústria.</p>
+      </div>
+
+      <div class="card-dark p-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        </div>
+        <p class="section-label mb-2">Mês 1–2</p>
+        <h3 class="font-bold text-white mb-2">Conectando as Ilhas</h3>
+        <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Comercial, produção, estoque e financeiro passam a falar a mesma língua. As brigas entre departamentos acabam.</p>
+      </div>
+
+      <div class="card-dark p-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <p class="section-label mb-2">Mês 2–3</p>
+        <h3 class="font-bold text-white mb-2">Você no Comando</h3>
+        <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Dashboards no ar. Você abre o celular de onde estiver e vê a fábrica em tempo real. Precificação com custo real.</p>
+      </div>
+
+      <div class="p-6 rounded-2xl" style="background:#043AAA;border:1px solid rgba(77,160,232,0.3)">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(255,255,255,0.15)">
+          <svg width="18" height="18" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <p class="text-xs font-bold uppercase tracking-widest mb-2" style="color:rgba(77,160,232,0.9)">Mês 4–6</p>
+        <h3 class="font-bold text-white mb-2">Transformação Completa</h3>
+        <p class="text-sm leading-relaxed" style="color:rgba(255,255,255,0.65)">Atrasos viram exceção. Você decide com dado real. Tira férias sem o celular. Fecha contratos que exigem ISO 9001.</p>
+      </div>
+
+    </div>
+
+    <div class="text-center">
+      <a href="#cta-final" class="btn-primary text-sm px-8 py-4">
+        Quero iniciar minha transformação →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     ENTREGÁVEIS
+════════════════════════════════ -->
+<section class="py-24 px-6 lg:px-16 section-gradient">
+  <div class="max-w-6xl mx-auto">
+    <div class="section-label mb-3">O que você leva</div>
+    <h2 class="text-3xl lg:text-4xl font-bold text-white mb-14 leading-tight">Tudo que você recebe quando escolhe a Nomus</h2>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+
+      <div class="card-dark p-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        </div>
+        <h3 class="font-bold text-white mb-2 text-sm">ERP Completo para Indústria</h3>
+        <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Produção, estoque, comercial, financeiro e fiscal integrados. Feito para PMEs industriais.</p>
+      </div>
+
+      <div class="card-dark p-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3 class="font-bold text-white mb-2 text-sm">Implantação Especializada</h3>
+        <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Time com experiência real de chão de fábrica. Seu implantador já viu seu problema antes.</p>
+      </div>
+
+      <div class="card-dark p-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        </div>
+        <h3 class="font-bold text-white mb-2 text-sm">Nomus Lean — 68h de Treinamento</h3>
+        <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Metodologia em vídeo. Você e a equipe aprendem no próprio ritmo sem parar a produção.</p>
+      </div>
+
+      <div class="card-dark p-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <h3 class="font-bold text-white mb-2 text-sm">Dashboard 100% Personalizado</h3>
+        <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Monte os painéis que fazem sentido para sua fábrica. Acesse de qualquer lugar, sem VPN.</p>
+      </div>
+
+      <div class="card-dark p-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        </div>
+        <h3 class="font-bold text-white mb-2 text-sm">Suporte que Fala de Indústria</h3>
+        <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Quando você liga, quem atende entende de PCP, ordem de produção e chão de fábrica.</p>
+      </div>
+
+      <div class="card-dark p-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h3 class="font-bold text-white mb-2 text-sm">Rastreabilidade + Conformidade Fiscal</h3>
+        <p class="text-xs leading-relaxed" style="color:var(--text-muted)">ISO 9001, Anvisa e reforma tributária resolvidos. Nunca mais perder contrato por falta de certificação.</p>
+      </div>
+
+    </div>
+
+    <!-- Bonus -->
+    <div class="rounded-2xl p-8 lg:p-10 flex flex-col lg:flex-row items-start lg:items-center gap-6 justify-between" style="background:#043AAA;border:1px solid rgba(77,160,232,0.25)">
+      <div class="flex items-start gap-5">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 text-3xl" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15)">
+          🎁
+        </div>
+        <div>
+          <p class="section-label mb-2" style="color:rgba(77,160,232,0.9)">Bônus exclusivo</p>
+          <h3 class="text-xl font-bold text-white mb-2">Diagnóstico Gratuito da sua Operação Industrial</h3>
+          <p class="text-sm leading-relaxed max-w-xl" style="color:rgba(255,255,255,0.65)">Ao falar com um especialista Nomus, você recebe gratuitamente uma reunião de diagnóstico onde nosso time analisa como está a operação da sua indústria hoje — gargalos, pontos de melhoria e um plano personalizado de como um ERP industrial pode transformar sua gestão. Sem compromisso. Sem custo.</p>
+        </div>
+      </div>
+      <a href="#cta-final" class="shrink-0 inline-flex items-center gap-2 bg-white font-bold text-sm px-7 py-3.5 rounded-full shadow-xl whitespace-nowrap hover:bg-blue-50 transition-colors" style="color:#043AAA">
+        Quero meu diagnóstico gratuito →
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     FAQ
+════════════════════════════════ -->
+<section id="faq" class="py-24 px-6 lg:px-16" style="background:var(--bg-base)">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="badge mx-auto mb-4">FAQ</div>
+      <h2 class="text-3xl lg:text-4xl font-bold text-white leading-tight">Perguntas que todo dono de fábrica faz antes de decidir</h2>
+    </div>
+
+    <div>
+      <div class="faq-item py-5 cursor-pointer" style="border-bottom:1px solid var(--border)" onclick="toggleFaq(this)">
+        <div class="flex items-center justify-between gap-4">
+          <h3 class="font-semibold text-white">Quanto tempo leva para o sistema estar funcionando?</h3>
+          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-lg font-light" style="background:rgba(255,255,255,0.07);border:1px solid var(--border-mid)">+</div>
+        </div>
+        <div class="faq-answer pt-3">
+          <p class="text-sm leading-relaxed" style="color:var(--text-muted)">As primeiras funcionalidades entram em operação nas primeiras semanas. A transformação completa acontece em 4 a 6 meses. Empresas que engajam a equipe desde o início chegam lá em 2 meses.</p>
+        </div>
+      </div>
+
+      <div class="faq-item py-5 cursor-pointer" style="border-bottom:1px solid var(--border)" onclick="toggleFaq(this)">
+        <div class="flex items-center justify-between gap-4">
+          <h3 class="font-semibold text-white">Preciso parar a produção para implantar?</h3>
+          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-lg font-light" style="background:rgba(255,255,255,0.07);border:1px solid var(--border-mid)">+</div>
+        </div>
+        <div class="faq-answer pt-3">
+          <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Não. A implantação acontece em paralelo com a operação. Você continua produzindo enquanto o sistema vai sendo configurado e a equipe vai sendo treinada.</p>
+        </div>
+      </div>
+
+      <div class="faq-item py-5 cursor-pointer" style="border-bottom:1px solid var(--border)" onclick="toggleFaq(this)">
+        <div class="flex items-center justify-between gap-4">
+          <h3 class="font-semibold text-white">E se minha equipe não adotar o sistema?</h3>
+          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-lg font-light" style="background:rgba(255,255,255,0.07);border:1px solid var(--border-mid)">+</div>
+        </div>
+        <div class="faq-answer pt-3">
+          <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Esse é o medo mais comum e o menos realizado na prática. Nosso time tem experiência em centenas de fábricas. Quando o time vê que o sistema facilita o trabalho deles, a resistência some.</p>
+        </div>
+      </div>
+
+      <div class="faq-item py-5 cursor-pointer" style="border-bottom:1px solid var(--border)" onclick="toggleFaq(this)">
+        <div class="flex items-center justify-between gap-4">
+          <h3 class="font-semibold text-white">A Nomus funciona para o tamanho da minha empresa?</h3>
+          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-lg font-light" style="background:rgba(255,255,255,0.07);border:1px solid var(--border-mid)">+</div>
+        </div>
+        <div class="faq-answer pt-3">
+          <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Se sua indústria fatura entre R$ 1,8 milhão e R$ 100 milhões, a Nomus foi feita para você. Somos o ERP que cresce junto com a sua fábrica, sem precisar trocar de sistema quando você chegar no próximo nível.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     CTA FINAL
+════════════════════════════════ -->
+<section id="cta-final" class="py-24 px-6 lg:px-16 relative overflow-hidden" style="background:var(--bg-surface)">
+
+  <!-- Background glow -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] pointer-events-none opacity-15" style="background:radial-gradient(ellipse at center, #043AAA 0%, transparent 70%); filter:blur(100px);"></div>
+
+  <div class="max-w-3xl mx-auto text-center relative z-10">
+    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest rounded-full px-3 py-1.5 mb-8" style="background:rgba(4,58,170,0.15);border:1px solid rgba(77,160,232,0.2);color:#4DA0E8">
+      <span class="badge-dot"></span> Vagas limitadas para implantação este mês
+    </div>
+    <h2 class="text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight">Sua fábrica está crescendo.<br/>Sua gestão precisa crescer junto.</h2>
+    <p class="text-lg mb-10" style="color:var(--text-muted)">Cada mês sem controle é um mês entregando atrasado, precificando errado e perdendo para o concorrente que já digitalizou.</p>
+
+    <div class="card-dark-mid p-8 mb-8 text-left">
+      <div class="section-label mb-1">Diagnóstico gratuito incluso</div>
+      <h3 class="text-lg font-bold text-white mb-1">Fale com um especialista em ERP para indústrias</h3>
+      <p class="text-sm mb-6" style="color:var(--text-muted)">Um especialista entra em contato em até 24h.</p>
+
+      <form id="nomus-form-cta" novalidate>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Nome <span style="color:#4DA0E8">*</span></label>
+            <input type="text" name="nome" placeholder="Seu nome completo" required class="form-input-dark"/>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Email <span style="color:#4DA0E8">*</span></label>
+            <input type="email" name="email" placeholder="seu@email.com.br" required class="form-input-dark"/>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Empresa <span style="color:#4DA0E8">*</span></label>
+            <input type="text" name="empresa" placeholder="Nome da sua empresa" required class="form-input-dark"/>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Seu cargo <span style="color:#4DA0E8">*</span></label>
+            <div class="relative">
+              <select name="cargo" required class="form-input-dark pr-9">
+                <option value="" disabled selected>Selecione</option>
+                <option>Estudante</option><option>Estagiário</option><option>Trainee</option>
+                <option>Auxiliar</option><option>Técnico</option><option>Assistente</option>
+                <option>Operador</option><option>Analista</option><option>Controller</option>
+                <option>Supervisor</option><option>Coordenador</option><option>Gerente</option>
+                <option>Diretor</option><option>CEO / Sócio</option><option>Consultor</option><option>Outros</option>
+              </select>
+              <div class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style="color:var(--text-dim)">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Setor da sua empresa <span style="color:#4DA0E8">*</span></label>
+            <div class="relative">
+              <select name="setor" required class="form-input-dark pr-9">
+                <option value="" disabled selected>Selecione</option>
+                <option>Alimentos e Bebidas (CNAEs 10 e 11)</option>
+                <option>Metalurgia e Metal Mecânico (CNAEs 24 e 25)</option>
+                <option>Máquinas e equipamentos (CNAEs 28 e 33)</option>
+                <option>Plásticos e borracha (CNAE 22)</option>
+                <option>Farmacêutico (CNAE 21)</option>
+                <option>Têxtil e vestuário (CNAEs 13, 14 e 15)</option>
+                <option>Elétrico e eletrônico (CNAEs 26 e 27)</option>
+                <option>Móveis e madeira (CNAEs 31 e 16)</option>
+                <option>Química (CNAEs 19 e 20)</option>
+                <option>Automotivo, náutico, aeronáutico (CNAEs 29 e 30)</option>
+                <option>Gráfica (CNAE 18)</option>
+                <option>Meu segmento não está na lista acima</option>
+                <option>Não trabalho atualmente</option>
+              </select>
+              <div class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style="color:var(--text-dim)">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Telefone <span style="color:#4DA0E8">*</span></label>
+            <input type="tel" name="telefone" id="tel2" placeholder="(00) 00000-0000" required class="form-input-dark"/>
+          </div>
+        </div>
+        <div class="mb-5">
+          <label class="block text-xs font-semibold text-slate-300 mb-2">Melhor período para contato <span style="color:#4DA0E8">*</span></label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="periodo-opt periodo-cta"><input type="radio" name="periodo_cta" value="Manhã" class="sr-only" required/> ☀️ Manhã</label>
+            <label class="periodo-opt periodo-cta"><input type="radio" name="periodo_cta" value="Tarde" class="sr-only"/> 🌤 Tarde</label>
+            <label class="periodo-opt periodo-cta"><input type="radio" name="periodo_cta" value="Noite" class="sr-only"/> 🌙 Noite</label>
+          </div>
+        </div>
+        <div id="cta-form-error" class="hidden mb-4 rounded-lg px-4 py-3 text-xs" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#f87171">
+          Por favor, preencha todos os campos obrigatórios.
+        </div>
+        <div id="cta-form-success" class="hidden mb-4 rounded-lg px-4 py-3 text-xs" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#4ade80">
+          ✓ Recebemos sua solicitação! Um especialista entrará em contato em breve.
+        </div>
+        <button type="submit" class="btn-primary w-full justify-center text-sm py-4">
+          Quero meu diagnóstico gratuito →
+        </button>
+        <p class="text-xs text-center mt-3" style="color:var(--text-dim)">🔒 Sem compromisso. Um especialista entra em contato em até 24 horas.</p>
+      </form>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-center gap-6 text-xs" style="color:var(--blue-light)">
+      <span>✓ +800 indústrias atendidas</span>
+      <span>✓ Diagnóstico gratuito incluso</span>
+      <span>✓ Sem parar a produção</span>
+      <span>✓ Reforma tributária inclusa</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     FOOTER
+════════════════════════════════ -->
+<footer class="py-8 px-6 lg:px-16" style="background:#040810;border-top:1px solid var(--border)">
+  <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+    <span class="text-white font-extrabold text-lg tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif">
+      NOMUS <span style="color:#4DA0E8">ERP</span>
+    </span>
+    <p class="text-xs text-center" style="color:var(--text-dim)">ERP 100% especializado em indústria • Fundado por engenheiros de produção</p>
+    <p class="text-xs" style="color:var(--text-dim)">© 2026 Nomus. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════
+     SCRIPTS
+════════════════════════════════ -->
+<script>
+// FAQ toggle
+function toggleFaq(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+// Phone mask
+function applyMask(input) {
+  input.addEventListener('input', function() {
+    let v = this.value.replace(/\D/g,'').slice(0,11);
+    if (v.length <= 10) v = v.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    else v = v.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+    this.value = v;
+  });
+}
+const tel1 = document.getElementById('tel');
+const tel2 = document.getElementById('tel2');
+if (tel1) applyMask(tel1);
+if (tel2) applyMask(tel2);
+
+// Radio periodo highlight
+function initRadio(cls) {
+  document.querySelectorAll('.' + cls).forEach(lbl => {
+    lbl.querySelector('input').addEventListener('change', function() {
+      document.querySelectorAll('.' + cls).forEach(l => {
+        l.style.borderColor = '';
+        l.style.background = '';
+        l.style.color = '';
+      });
+      lbl.style.borderColor = '#4DA0E8';
+      lbl.style.background = 'rgba(4,58,170,0.2)';
+      lbl.style.color = '#4DA0E8';
+    });
+  });
+}
+initRadio('periodo-option');
+initRadio('periodo-cta');
+
+// Form validation helper
+function validateForm(formId, errorId, successId, radioName) {
+  const form = document.getElementById(formId);
+  if (!form) return;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const error = document.getElementById(errorId);
+    const success = document.getElementById(successId);
+    error.classList.add('hidden');
+    let valid = true;
+    form.querySelectorAll('[required]').forEach(f => {
+      f.style.borderColor = '';
+      if (!f.value.trim()) {
+        valid = false;
+        f.style.borderColor = '#ef4444';
+      }
+    });
+    if (!form.querySelector('input[name="' + radioName + '"]:checked')) valid = false;
+    if (!valid) { error.classList.remove('hidden'); return; }
+    success.classList.remove('hidden');
+    form.reset();
+    document.querySelectorAll('.periodo-option, .periodo-cta').forEach(l => {
+      l.style.borderColor = '';
+      l.style.background = '';
+      l.style.color = '';
+    });
+  });
+}
+validateForm('nomus-form', 'form-error', 'form-success', 'periodo');
+validateForm('nomus-form-cta', 'cta-form-error', 'cta-form-success', 'periodo_cta');
+</script>
+
+</body>
+</html>
