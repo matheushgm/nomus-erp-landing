@@ -900,17 +900,21 @@ const tel2 = document.getElementById('tel2');
 if (tel1) applyMask(tel1);
 if (tel2) applyMask(tel2);
 
-// Form validation helper
+// Form validation + GTM push
 function validateForm(formId, errorId, successId) {
-  const form = document.getElementById(formId);
+  var form = document.getElementById(formId);
   if (!form) return;
+
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-    const error = document.getElementById(errorId);
-    const success = document.getElementById(successId);
+
+    var error   = document.getElementById(errorId);
+    var success = document.getElementById(successId);
     error.classList.add('hidden');
-    let valid = true;
-    form.querySelectorAll('[required]').forEach(f => {
+
+    // Validação dos campos obrigatórios
+    var valid = true;
+    form.querySelectorAll('[required]').forEach(function(f) {
       f.style.borderColor = '';
       if (!f.value.trim()) {
         valid = false;
@@ -919,38 +923,53 @@ function validateForm(formId, errorId, successId) {
     });
     if (!valid) { error.classList.remove('hidden'); return; }
 
-    // Coleta os dados do formulário
-    var nomeCompleto = form.querySelector('[name="nome"]') ? form.querySelector('[name="nome"]').value.trim() : '';
-    var partes    = nomeCompleto.split(/\s+/);
+    // Coleta via FormData (método mais robusto)
+    var fd        = new FormData(form);
+    var nome      = (fd.get('nome')      || '').trim();
+    var email     = (fd.get('email')     || '').trim();
+    var telefone  = (fd.get('telefone')  || '').trim();
+    var empresa   = (fd.get('empresa')   || '').trim();
+    var cargo     = (fd.get('cargo')     || '').trim();
+    var setor     = (fd.get('setor')     || '').trim();
+
+    var partes    = nome.split(/\s+/);
     var firstName = partes[0] || '';
     var lastName  = partes.slice(1).join(' ') || '';
-    var email     = form.querySelector('[name="email"]')    ? form.querySelector('[name="email"]').value.trim()    : '';
-    var phone     = form.querySelector('[name="telefone"]') ? form.querySelector('[name="telefone"]').value.trim() : '';
-    var cargo     = form.querySelector('[name="cargo"]')    ? form.querySelector('[name="cargo"]').value.trim()    : '';
 
-    // Seta variáveis globais que as GTM JS Variables leem via window['...']
+    // Seta no window para GTM JS Variables lerem
     window['user-js-firstname'] = firstName;
     window['user-js-lastname']  = lastName;
     window['user-js-email']     = email;
-    window['user-js-phone']     = phone;
+    window['user-js-phone']     = telefone;
     window['user-js-cargo']     = cargo;
 
-    // Push do evento para o dataLayer do GTM
+    // Debug no console (remover após confirmar funcionamento)
+    console.log('[Nomus GTM] Dados capturados:', {
+      firstName: firstName, lastName: lastName,
+      email: email, phone: telefone, cargo: cargo,
+      empresa: empresa, setor: setor
+    });
+
+    // Push para o dataLayer do GTM
     window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: 'form_submit_nomus' }); // limpa evento anterior
     window.dataLayer.push({
       event:               'form_submit_nomus',
       'user-js-firstname': firstName,
       'user-js-lastname':  lastName,
       'user-js-email':     email,
-      'user-js-phone':     phone,
-      'user-js-cargo':     cargo
+      'user-js-phone':     telefone,
+      'user-js-cargo':     cargo,
+      formEmpresa:         empresa,
+      formSetor:           setor
     });
 
     success.classList.remove('hidden');
     form.reset();
   });
 }
-validateForm('nomus-form', 'form-error', 'form-success');
+
+validateForm('nomus-form',     'form-error',     'form-success');
 validateForm('nomus-form-cta', 'cta-form-error', 'cta-form-success');
 </script>
 
