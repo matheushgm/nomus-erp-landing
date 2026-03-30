@@ -345,6 +345,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <button type="submit" class="btn-primary w-full justify-center text-sm py-3.5">
               Falar com especialista →
             </button>
+
+            <!-- Campos ocultos UTM -->
+            <input type="hidden" name="utm_source"   id="f1_utm_source">
+            <input type="hidden" name="utm_medium"   id="f1_utm_medium">
+            <input type="hidden" name="utm_campaign" id="f1_utm_campaign">
+            <input type="hidden" name="utm_content"  id="f1_utm_content">
+            <input type="hidden" name="utm_term"     id="f1_utm_term">
+            <input type="hidden" name="device"       id="f1_device">
+            <input type="hidden" name="ad_id"        id="f1_ad_id">
+            <input type="hidden" name="matchtype"    id="f1_matchtype">
+            <input type="hidden" name="page_url"     id="f1_page_url">
+            <input type="hidden" name="referrer"     id="f1_referrer">
           </form>
         </div>
         <p class="text-xs text-center mt-3" style="color:var(--text-dim)">🔒 Seus dados estão seguros e protegidos</p>
@@ -844,6 +856,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           Quero meu diagnóstico gratuito →
         </button>
         <p class="text-xs text-center mt-3" style="color:var(--text-dim)">🔒 Sem compromisso. Um especialista entra em contato em até 24 horas.</p>
+
+        <!-- Campos ocultos UTM -->
+        <input type="hidden" name="utm_source"   id="f2_utm_source">
+        <input type="hidden" name="utm_medium"   id="f2_utm_medium">
+        <input type="hidden" name="utm_campaign" id="f2_utm_campaign">
+        <input type="hidden" name="utm_content"  id="f2_utm_content">
+        <input type="hidden" name="utm_term"     id="f2_utm_term">
+        <input type="hidden" name="device"       id="f2_device">
+        <input type="hidden" name="ad_id"        id="f2_ad_id">
+        <input type="hidden" name="matchtype"    id="f2_matchtype">
+        <input type="hidden" name="page_url"     id="f2_page_url">
+        <input type="hidden" name="referrer"     id="f2_referrer">
       </form>
     </div>
 
@@ -942,5 +966,24 @@ validateForm('nomus-form', 'form-error', 'form-success', 'periodo');
 validateForm('nomus-form-cta', 'cta-form-error', 'cta-form-success', 'periodo_cta');
 </script>
 
+
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var utmFields = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','device','ad_id','matchtype'];
+  var prefixes  = ['f1','f2'];
+
+  prefixes.forEach(function (pfx) {
+    utmFields.forEach(function (key) {
+      var el = document.getElementById(pfx + '_' + key);
+      if (el) el.value = params.get(key) || '';
+    });
+    var pageUrl = document.getElementById(pfx + '_page_url');
+    var referrer = document.getElementById(pfx + '_referrer');
+    if (pageUrl)  pageUrl.value  = window.location.href;
+    if (referrer) referrer.value = document.referrer || '';
+  });
+})();
+</script>
 </body>
 </html>
