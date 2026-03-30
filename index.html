@@ -326,14 +326,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <input type="tel" name="telefone" id="tel" placeholder="(00) 00000-0000" required class="form-input-dark"/>
             </div>
 
-            <div class="mb-6">
-              <label class="block text-xs font-semibold text-slate-300 mb-2">Melhor período para contato <span style="color:#4DA0E8">*</span></label>
-              <div class="grid grid-cols-3 gap-2">
-                <label class="periodo-opt periodo-option"><input type="radio" name="periodo" value="Manhã" class="sr-only" required/> ☀️ Manhã</label>
-                <label class="periodo-opt periodo-option"><input type="radio" name="periodo" value="Tarde" class="sr-only"/> 🌤 Tarde</label>
-                <label class="periodo-opt periodo-option"><input type="radio" name="periodo" value="Noite" class="sr-only"/> 🌙 Noite</label>
-              </div>
-            </div>
 
             <div id="form-error" class="hidden mb-4 rounded-lg px-4 py-3 text-xs" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#f87171">
               Por favor, preencha todos os campos obrigatórios.
@@ -838,14 +830,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <input type="tel" name="telefone" id="tel2" placeholder="(00) 00000-0000" required class="form-input-dark"/>
           </div>
         </div>
-        <div class="mb-5">
-          <label class="block text-xs font-semibold text-slate-300 mb-2">Melhor período para contato <span style="color:#4DA0E8">*</span></label>
-          <div class="grid grid-cols-3 gap-2">
-            <label class="periodo-opt periodo-cta"><input type="radio" name="periodo_cta" value="Manhã" class="sr-only" required/> ☀️ Manhã</label>
-            <label class="periodo-opt periodo-cta"><input type="radio" name="periodo_cta" value="Tarde" class="sr-only"/> 🌤 Tarde</label>
-            <label class="periodo-opt periodo-cta"><input type="radio" name="periodo_cta" value="Noite" class="sr-only"/> 🌙 Noite</label>
-          </div>
-        </div>
         <div id="cta-form-error" class="hidden mb-4 rounded-lg px-4 py-3 text-xs" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#f87171">
           Por favor, preencha todos os campos obrigatórios.
         </div>
@@ -916,26 +900,8 @@ const tel2 = document.getElementById('tel2');
 if (tel1) applyMask(tel1);
 if (tel2) applyMask(tel2);
 
-// Radio periodo highlight
-function initRadio(cls) {
-  document.querySelectorAll('.' + cls).forEach(lbl => {
-    lbl.querySelector('input').addEventListener('change', function() {
-      document.querySelectorAll('.' + cls).forEach(l => {
-        l.style.borderColor = '';
-        l.style.background = '';
-        l.style.color = '';
-      });
-      lbl.style.borderColor = '#4DA0E8';
-      lbl.style.background = 'rgba(4,58,170,0.2)';
-      lbl.style.color = '#4DA0E8';
-    });
-  });
-}
-initRadio('periodo-option');
-initRadio('periodo-cta');
-
 // Form validation helper
-function validateForm(formId, errorId, successId, radioName) {
+function validateForm(formId, errorId, successId) {
   const form = document.getElementById(formId);
   if (!form) return;
   form.addEventListener('submit', function(e) {
@@ -951,19 +917,13 @@ function validateForm(formId, errorId, successId, radioName) {
         f.style.borderColor = '#ef4444';
       }
     });
-    if (!form.querySelector('input[name="' + radioName + '"]:checked')) valid = false;
     if (!valid) { error.classList.remove('hidden'); return; }
     success.classList.remove('hidden');
     form.reset();
-    document.querySelectorAll('.periodo-option, .periodo-cta').forEach(l => {
-      l.style.borderColor = '';
-      l.style.background = '';
-      l.style.color = '';
-    });
   });
 }
-validateForm('nomus-form', 'form-error', 'form-success', 'periodo');
-validateForm('nomus-form-cta', 'cta-form-error', 'cta-form-success', 'periodo_cta');
+validateForm('nomus-form', 'form-error', 'form-success');
+validateForm('nomus-form-cta', 'cta-form-error', 'cta-form-success');
 </script>
 
 
