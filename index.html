@@ -920,23 +920,30 @@ function validateForm(formId, errorId, successId) {
     if (!valid) { error.classList.remove('hidden'); return; }
 
     // Coleta os dados do formulário
-    var nomeCompleto = (form.querySelector('[name="nome"]') || {}).value || '';
-    var partes       = nomeCompleto.trim().split(/\s+/);
-    var firstName    = partes[0] || '';
-    var lastName     = partes.slice(1).join(' ') || '';
-    var email        = (form.querySelector('[name="email"]') || {}).value || '';
-    var phone        = (form.querySelector('[name="telefone"]') || {}).value || '';
-    var cargo        = (form.querySelector('[name="empresa"]') || {}).value || '';
+    var nomeCompleto = form.querySelector('[name="nome"]') ? form.querySelector('[name="nome"]').value.trim() : '';
+    var partes    = nomeCompleto.split(/\s+/);
+    var firstName = partes[0] || '';
+    var lastName  = partes.slice(1).join(' ') || '';
+    var email     = form.querySelector('[name="email"]')    ? form.querySelector('[name="email"]').value.trim()    : '';
+    var phone     = form.querySelector('[name="telefone"]') ? form.querySelector('[name="telefone"]').value.trim() : '';
+    var cargo     = form.querySelector('[name="cargo"]')    ? form.querySelector('[name="cargo"]').value.trim()    : '';
 
-    // Push para o dataLayer do GTM
+    // Seta variáveis globais que as GTM JS Variables leem via window['...']
+    window['user-js-firstname'] = firstName;
+    window['user-js-lastname']  = lastName;
+    window['user-js-email']     = email;
+    window['user-js-phone']     = phone;
+    window['user-js-cargo']     = cargo;
+
+    // Push do evento para o dataLayer do GTM
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
-      event:             'form_submit_nomus',
+      event:               'form_submit_nomus',
       'user-js-firstname': firstName,
-      'user-js-lastname':  lastName || 'valor padrão para nome vazio',
-      'user-js-email':     email    || 'valor padrão',
-      'user-js-phone':     phone    || 'Valor Padrão para Telefone Vazio',
-      'user-js-cargo':     cargo    || ''
+      'user-js-lastname':  lastName,
+      'user-js-email':     email,
+      'user-js-phone':     phone,
+      'user-js-cargo':     cargo
     });
 
     success.classList.remove('hidden');
