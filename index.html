@@ -943,16 +943,9 @@ function validateForm(formId, errorId, successId) {
     window['user-js-phone']     = telefone;
     window['user-js-cargo']     = cargo;
 
-    // Debug no console (remover após confirmar funcionamento)
-    console.log('[Nomus GTM] Dados capturados:', {
-      firstName: firstName, lastName: lastName,
-      email: email, phone: telefone, cargo: cargo,
-      empresa: empresa, setor: setor
-    });
-
     // Push para o dataLayer do GTM
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event: 'form_submit_nomus' }); // limpa evento anterior
+    window.dataLayer.push({ event: 'form_submit_nomus' });
     window.dataLayer.push({
       event:               'form_submit_nomus',
       'user-js-firstname': firstName,
@@ -962,6 +955,48 @@ function validateForm(formId, errorId, successId) {
       'user-js-cargo':     cargo,
       formEmpresa:         empresa,
       formSetor:           setor
+    });
+
+    // Coleta UTMs dos campos ocultos
+    var utmSource   = (fd.get('utm_source')   || '').trim();
+    var utmMedium   = (fd.get('utm_medium')   || '').trim();
+    var utmCampaign = (fd.get('utm_campaign') || '').trim();
+    var utmContent  = (fd.get('utm_content')  || '').trim();
+    var utmTerm     = (fd.get('utm_term')     || '').trim();
+    var device      = (fd.get('device')       || '').trim();
+    var adId        = (fd.get('ad_id')        || '').trim();
+    var matchtype   = (fd.get('matchtype')    || '').trim();
+    var pageUrl     = (fd.get('page_url')     || window.location.href).trim();
+    var referrer    = (fd.get('referrer')     || document.referrer).trim();
+
+    // Envia para o webhook n8n
+    var payload = {
+      nome:         nome,
+      firstName:    firstName,
+      lastName:     lastName,
+      email:        email,
+      telefone:     telefone,
+      empresa:      empresa,
+      cargo:        cargo,
+      setor:        setor,
+      utm_source:   utmSource,
+      utm_medium:   utmMedium,
+      utm_campaign: utmCampaign,
+      utm_content:  utmContent,
+      utm_term:     utmTerm,
+      device:       device,
+      ad_id:        adId,
+      matchtype:    matchtype,
+      page_url:     pageUrl,
+      referrer:     referrer
+    };
+
+    fetch('https://n8nwebhookk.revenuelab.com.br/webhook/f658cdf7-f45d-4737-8f9c-bd06c69a9284', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    }).catch(function(err) {
+      console.warn('[Nomus] Webhook error:', err);
     });
 
     success.classList.remove('hidden');
