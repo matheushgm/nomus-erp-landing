@@ -22,58 +22,58 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   :root {
-    --bg-base:    #070d1a;
-    --bg-surface: #0d1525;
-    --bg-card:    #111c30;
-    --border:     rgba(255,255,255,0.07);
-    --border-mid: rgba(255,255,255,0.12);
-    --blue:       #043AAA;
-    --blue-light: #4DA0E8;
-    --text-muted: #8b9db8;
-    --text-dim:   #4e6080;
+    --bg-base:    #f4f8fb;
+    --bg-surface: #eaf2f7;
+    --bg-card:    #ffffff;
+    --border:     rgba(0,0,0,0.08);
+    --border-mid: rgba(0,0,0,0.12);
+    --blue:       #0b99d1;
+    --blue-light: #0992be;
+    --text-muted: #5e7581;
+    --text-dim:   #868686;
   }
   * { box-sizing: border-box; }
-  body { font-family: "DM Sans", sans-serif; background: var(--bg-base); color: #e2e8f0; overflow-x: hidden; }
+  body { font-family: "DM Sans", sans-serif; background: var(--bg-base); color: #2c2d33; overflow-x: hidden; }
   h1,h2,h3,h4,h5,h6 { font-family: "Plus Jakarta Sans", sans-serif; }
   select { appearance: none; -webkit-appearance: none; }
 
   /* Glow effects */
-  .glow-blue { box-shadow: 0 0 40px rgba(4,58,170,0.25); }
-  .glow-sm   { box-shadow: 0 0 20px rgba(77,160,232,0.15); }
+  .glow-blue { box-shadow: 0 0 40px rgba(11,153,209,0.2); }
+  .glow-sm   { box-shadow: 0 0 20px rgba(11,153,209,0.12); }
 
   /* Urgency bar gradient */
-  .urgency-bar { background: linear-gradient(90deg, #043AAA 0%, #2563eb 50%, #043AAA 100%); }
+  .urgency-bar { background: linear-gradient(90deg, #0b99d1 0%, #25baf5 50%, #0b99d1 100%); }
 
   /* Nav blur */
   .nav-blur { background: #ffffff; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid #e2e8f0; }
 
-  /* Dark cards */
-  .card-dark { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; }
-  .card-dark-mid { background: var(--bg-card); border: 1px solid var(--border-mid); border-radius: 1rem; }
+  /* Cards */
+  .card-dark { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .card-dark-mid { background: var(--bg-card); border: 1px solid var(--border-mid); border-radius: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
 
   /* Pill button */
   .btn-primary { background: var(--blue); color: #fff; font-weight: 700; border-radius: 9999px; padding: 0.75rem 1.75rem; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem; }
-  .btn-primary:hover { background: #0540cc; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(4,58,170,0.4); }
-  .btn-secondary { background: transparent; color: #e2e8f0; font-weight: 600; border-radius: 9999px; padding: 0.75rem 1.75rem; border: 1px solid var(--border-mid); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem; }
-  .btn-secondary:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); }
+  .btn-primary:hover { background: #09a8e0; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(11,153,209,0.4); }
+  .btn-secondary { background: transparent; color: #2c2d33; font-weight: 600; border-radius: 9999px; padding: 0.75rem 1.75rem; border: 1px solid var(--border-mid); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem; }
+  .btn-secondary:hover { border-color: rgba(11,153,209,0.4); background: rgba(11,153,209,0.05); }
 
-  /* Form inputs in dark style */
+  /* Form inputs */
   .form-input-dark {
-    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border-mid);
-    border-radius: 0.625rem; padding: 0.65rem 1rem; font-size: 0.875rem; color: #e2e8f0;
+    width: 100%; background: #ffffff; border: 1px solid var(--border-mid);
+    border-radius: 0.625rem; padding: 0.65rem 1rem; font-size: 0.875rem; color: #2c2d33;
     transition: border-color 0.2s;
   }
   .form-input-dark::placeholder { color: var(--text-dim); }
-  .form-input-dark:focus { outline: none; border-color: var(--blue-light); background: rgba(77,160,232,0.06); }
-  .form-input-dark option { background: #0d1525; color: #e2e8f0; }
+  .form-input-dark:focus { outline: none; border-color: var(--blue); background: rgba(11,153,209,0.04); }
+  .form-input-dark option { background: #ffffff; color: #2c2d33; }
 
   /* Badge pill */
-  .badge { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(4,58,170,0.15); border: 1px solid rgba(77,160,232,0.25); color: #4DA0E8; border-radius: 9999px; padding: 0.3rem 0.85rem; }
-  .badge-dot { width: 6px; height: 6px; border-radius: 9999px; background: #4DA0E8; animation: pulse-dot 2s infinite; }
+  .badge { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(11,153,209,0.1); border: 1px solid rgba(11,153,209,0.3); color: #0b99d1; border-radius: 9999px; padding: 0.3rem 0.85rem; }
+  .badge-dot { width: 6px; height: 6px; border-radius: 9999px; background: #0b99d1; animation: pulse-dot 2s infinite; }
   @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
 
   /* Section label */
-  .section-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue-light); }
+  .section-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); }
 
   /* Divider line */
   .line-divider { border: none; border-top: 1px solid var(--border); }
@@ -85,11 +85,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .faq-icon { transition: transform 0.2s; }
 
   /* Periodo radio */
-  .periodo-opt { border: 1px solid var(--border-mid); border-radius: 0.625rem; padding: 0.6rem 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); cursor: pointer; background: rgba(255,255,255,0.03); transition: all 0.15s; text-align: center; }
-  .periodo-opt:hover { border-color: rgba(77,160,232,0.4); }
+  .periodo-opt { border: 1px solid var(--border-mid); border-radius: 0.625rem; padding: 0.6rem 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); cursor: pointer; background: #f8fafc; transition: all 0.15s; text-align: center; }
+  .periodo-opt:hover { border-color: rgba(11,153,209,0.4); }
 
   /* Stat number */
-  .stat-num { font-family: "Plus Jakarta Sans", sans-serif; font-size: 2rem; font-weight: 800; color: #fff; }
+  .stat-num { font-family: "Plus Jakarta Sans", sans-serif; font-size: 2rem; font-weight: 800; color: #2c2d33; }
 
   /* Noise overlay for hero */
   .noise::before {
@@ -103,19 +103,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   #mob-menu { background: #ffffff; backdrop-filter: blur(20px); border-bottom: 1px solid #e2e8f0; }
 
   /* Gradient text */
-  .grad-text { background: linear-gradient(135deg, #fff 0%, #4DA0E8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .grad-text { background: linear-gradient(135deg, #2c2d33 0%, #0b99d1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
   /* Shimmer line hero */
   .shimmer-line {
     height: 1px;
-    background: linear-gradient(90deg, transparent 0%, #043AAA 30%, #4DA0E8 50%, #043AAA 70%, transparent 100%);
-    opacity: 0.6;
+    background: linear-gradient(90deg, transparent 0%, #0b99d1 30%, #25baf5 50%, #0b99d1 70%, transparent 100%);
+    opacity: 0.5;
   }
 
   /* Card "antes" */
-  .card-antes { background: rgba(239,68,68,0.04); border: 1px solid rgba(239,68,68,0.15); border-radius: 1rem; }
+  .card-antes { background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.18); border-radius: 1rem; }
   /* Card "depois" */
-  .card-depois { background: rgba(4,58,170,0.06); border: 1px solid rgba(77,160,232,0.2); border-radius: 1rem; }
+  .card-depois { background: rgba(11,153,209,0.06); border: 1px solid rgba(11,153,209,0.2); border-radius: 1rem; }
 
   /* Gradient section */
   .section-gradient { background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-surface) 50%, var(--bg-base) 100%); }
@@ -176,7 +176,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="relative pt-20 pb-0 px-6 lg:px-16 overflow-hidden" style="background:var(--bg-base)">
 
   <!-- Background radial glow -->
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full opacity-20 pointer-events-none" style="background:radial-gradient(ellipse at center, #043AAA 0%, transparent 70%); filter:blur(60px);"></div>
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full opacity-20 pointer-events-none" style="background:radial-gradient(ellipse at center, #0b99d1 0%, transparent 70%); filter:blur(60px);"></div>
 
   <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-start relative z-10">
 
@@ -186,15 +186,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <!-- Social proof badge -->
       <div class="flex items-center gap-3 mb-7">
         <div class="flex -space-x-2">
-          <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold text-white" style="background:#043AAA;border-color:var(--bg-base)">R</div>
-          <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold text-white" style="background:#4DA0E8;border-color:var(--bg-base)">M</div>
+          <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold text-white" style="background:#0b99d1;border-color:var(--bg-base)">R</div>
+          <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold text-white" style="background:#25baf5;border-color:var(--bg-base)">M</div>
           <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold text-white" style="background:#334155;border-color:var(--bg-base)">J</div>
         </div>
-        <p class="text-xs" style="color:var(--text-muted)"><span class="font-bold text-white">+1.100 donos de indústria</span> já têm controle total da fábrica</p>
+        <p class="text-xs" style="color:var(--text-muted)"><span class="font-bold text-slate-800">+1.100 donos de indústria</span> já têm controle total da fábrica</p>
       </div>
 
       <!-- Headline -->
-      <h1 class="text-4xl lg:text-5xl xl:text-[3.2rem] font-extrabold text-white tracking-tight leading-[1.1] mb-5">
+      <h1 class="text-4xl lg:text-5xl xl:text-[3.2rem] font-extrabold text-slate-800 tracking-tight leading-[1.1] mb-5">
         Tenha integração entre<br/>
         <span class="grad-text">vendas e produção</span><br/>
         na sua Indústria com um ERP<br/>
@@ -211,20 +211,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="section-label mb-4">Como nosso ERP vai transformar a sua indústria</p>
         <div class="grid grid-cols-1 gap-3.5">
           <div class="flex items-start gap-3">
-            <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(4,58,170,0.3);border:1px solid rgba(77,160,232,0.4)">
-              <svg width="10" height="10" fill="none" stroke="#4DA0E8" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(11,153,209,0.15);border:1px solid rgba(11,153,209,0.4)">
+              <svg width="10" height="10" fill="none" stroke="#0b99d1" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
             </div>
             <p class="text-sm text-slate-300">Prazo prometido para o cliente = prazo entregue. Sem surpresa na produção</p>
           </div>
           <div class="flex items-start gap-3">
-            <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(4,58,170,0.3);border:1px solid rgba(77,160,232,0.4)">
-              <svg width="10" height="10" fill="none" stroke="#4DA0E8" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(11,153,209,0.15);border:1px solid rgba(11,153,209,0.4)">
+              <svg width="10" height="10" fill="none" stroke="#0b99d1" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
             </div>
             <p class="text-sm text-slate-300">Você sabe o custo real de cada produto, nunca mais vende no prejuízo sem saber</p>
           </div>
           <div class="flex items-start gap-3">
-            <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(4,58,170,0.3);border:1px solid rgba(77,160,232,0.4)">
-              <svg width="10" height="10" fill="none" stroke="#4DA0E8" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(11,153,209,0.15);border:1px solid rgba(11,153,209,0.4)">
+              <svg width="10" height="10" fill="none" stroke="#0b99d1" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
             </div>
             <p class="text-sm text-slate-300">Dashboard em tempo real no celular, você gerencia a fábrica de onde estiver</p>
           </div>
@@ -258,29 +258,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="flex flex-col justify-center py-8 lg:py-16">
       <div class="max-w-md w-full mx-auto">
         <div class="badge mb-4"><span class="badge-dot"></span> Sem compromisso</div>
-        <h2 class="text-xl font-bold text-white mb-1">Fale com um especialista em ERP para indústrias</h2>
+        <h2 class="text-xl font-bold text-slate-800 mb-1">Fale com um especialista em ERP para indústrias</h2>
         <p class="text-sm mb-5" style="color:var(--text-muted)">Um especialista entra em contato em até 24h.</p>
 
         <div class="card-dark-mid p-6">
           <form id="nomus-form" novalidate>
 
             <div class="mb-4">
-              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Nome <span style="color:#4DA0E8">*</span></label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nome <span style="color:#0b99d1">*</span></label>
               <input type="text" name="nome" placeholder="Seu nome completo" required class="form-input-dark"/>
             </div>
 
             <div class="mb-4">
-              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Email <span style="color:#4DA0E8">*</span></label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1.5">Email <span style="color:#0b99d1">*</span></label>
               <input type="email" name="email" placeholder="seu@email.com.br" required class="form-input-dark"/>
             </div>
 
             <div class="mb-4">
-              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Empresa <span style="color:#4DA0E8">*</span></label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1.5">Empresa <span style="color:#0b99d1">*</span></label>
               <input type="text" name="empresa" placeholder="Nome da sua empresa" required class="form-input-dark"/>
             </div>
 
             <div class="mb-4">
-              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Seu cargo <span style="color:#4DA0E8">*</span></label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1.5">Seu cargo <span style="color:#0b99d1">*</span></label>
               <div class="relative">
                 <select name="cargo" required class="form-input-dark pr-9">
                   <option value="" disabled selected>Selecione</option>
@@ -298,7 +298,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
 
             <div class="mb-4">
-              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Setor da sua empresa <span style="color:#4DA0E8">*</span></label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1.5">Setor da sua empresa <span style="color:#0b99d1">*</span></label>
               <div class="relative">
                 <select name="setor" required class="form-input-dark pr-9">
                   <option value="" disabled selected>Selecione</option>
@@ -334,7 +334,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
 
             <div class="mb-4">
-              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Telefone <span style="color:#4DA0E8">*</span></label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1.5">Telefone <span style="color:#0b99d1">*</span></label>
               <input type="tel" name="telefone" id="tel" placeholder="(00) 00000-0000" required class="form-input-dark"/>
             </div>
 
@@ -381,7 +381,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="text-center mb-16">
       <div class="badge mx-auto mb-4">Antes vs. Depois</div>
-      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4 max-w-2xl mx-auto leading-tight">A diferença entre operar no escuro e ter controle total</h2>
+      <h2 class="text-3xl lg:text-4xl font-bold text-slate-800 mb-4 max-w-2xl mx-auto leading-tight">A diferença entre operar no escuro e ter controle total</h2>
       <p class="text-base max-w-xl mx-auto" style="color:var(--text-muted)">Dois cenários. Um é onde você está agora. O outro é onde você vai estar em 6 meses.</p>
     </div>
 
@@ -394,7 +394,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <svg width="14" height="14" fill="none" stroke="#ef4444" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
           </div>
           <div>
-            <p class="font-bold text-white text-sm">Sua fábrica HOJE</p>
+            <p class="font-bold text-slate-800 text-sm">Sua fábrica HOJE</p>
             <p class="text-xs" style="color:#f87171">Operando no escuro</p>
           </div>
         </div>
@@ -404,7 +404,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <svg width="20" height="20" fill="none" stroke="#f87171" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
             </div>
             <div>
-              <p class="font-bold text-white text-sm mb-1">Comercial e produção vivem em guerra</p>
+              <p class="font-bold text-slate-800 text-sm mb-1">Comercial e produção vivem em guerra</p>
               <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Vendas promete prazo que a fábrica não consegue cumprir. O cliente cobra você. Você corre apagar incêndio.</p>
             </div>
           </div>
@@ -414,7 +414,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <svg width="20" height="20" fill="none" stroke="#f87171" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
             </div>
             <div>
-              <p class="font-bold text-white text-sm mb-1">Decisões tomadas no escuro</p>
+              <p class="font-bold text-slate-800 text-sm mb-1">Decisões tomadas no escuro</p>
               <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Você não sabe se está vendendo com lucro ou prejuízo. Os dados estão em planilhas que só você sabe costurar.</p>
             </div>
           </div>
@@ -423,32 +423,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- CARD DEPOIS -->
       <div class="card-depois overflow-hidden">
-        <div class="px-6 py-4 flex items-center gap-3" style="background:rgba(4,58,170,0.08);border-bottom:1px solid rgba(77,160,232,0.15)">
-          <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#043AAA;border:1px solid rgba(77,160,232,0.4)">
+        <div class="px-6 py-4 flex items-center gap-3" style="background:rgba(11,153,209,0.08);border-bottom:1px solid rgba(11,153,209,0.15)">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#0b99d1;border:1px solid rgba(11,153,209,0.4)">
             <svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
           </div>
           <div>
-            <p class="font-bold text-white text-sm">Sua fábrica com a NOMUS</p>
-            <p class="text-xs" style="color:#4DA0E8">Controle total em tempo real</p>
+            <p class="font-bold text-slate-800 text-sm">Sua fábrica com a NOMUS</p>
+            <p class="text-xs" style="color:#0b99d1">Controle total em tempo real</p>
           </div>
         </div>
         <div class="p-6 flex flex-col gap-5">
           <div class="flex items-start gap-4">
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(4,58,170,0.15);border:1px solid rgba(77,160,232,0.2)">
-              <svg width="20" height="20" fill="none" stroke="#4DA0E8" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.2)">
+              <svg width="20" height="20" fill="none" stroke="#0b99d1" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
             </div>
             <div>
-              <p class="font-bold text-white text-sm mb-1">Comercial só vende o que a produção entrega</p>
+              <p class="font-bold text-slate-800 text-sm mb-1">Comercial só vende o que a produção entrega</p>
               <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Prazo prometido é prazo cumprido. Todos falam a mesma língua dentro do mesmo sistema, em tempo real.</p>
             </div>
           </div>
           <hr class="line-divider"/>
           <div class="flex items-start gap-4">
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(4,58,170,0.15);border:1px solid rgba(77,160,232,0.2)">
-              <svg width="20" height="20" fill="none" stroke="#4DA0E8" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.2)">
+              <svg width="20" height="20" fill="none" stroke="#0b99d1" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
             </div>
             <div>
-              <p class="font-bold text-white text-sm mb-1">Dashboard com informações confiáveis</p>
+              <p class="font-bold text-slate-800 text-sm mb-1">Dashboard com informações confiáveis</p>
               <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Você abre o celular de qualquer lugar e vê a fábrica inteira. Decide com dado. Não com feeling.</p>
             </div>
           </div>
@@ -471,11 +471,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section id="diferenciais" class="py-24 px-6 lg:px-16 relative overflow-hidden" style="background:var(--bg-surface)">
 
   <!-- Background glow -->
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] pointer-events-none opacity-10" style="background:radial-gradient(ellipse at center, #043AAA 0%, transparent 70%); filter:blur(80px);"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] pointer-events-none opacity-10" style="background:radial-gradient(ellipse at center, #0b99d1 0%, transparent 70%); filter:blur(80px);"></div>
 
   <div class="max-w-6xl mx-auto relative z-10">
     <div class="section-label mb-4">Nossa Origem</div>
-    <h2 class="text-3xl lg:text-4xl font-bold text-white mb-5 max-w-3xl leading-tight">Não somos mais um software de gestão.<br/>Somos o ERP que nasceu dentro da indústria.</h2>
+    <h2 class="text-3xl lg:text-4xl font-bold text-slate-800 mb-5 max-w-3xl leading-tight">Não somos mais um software de gestão.<br/>Somos o ERP que nasceu dentro da indústria.</h2>
     <p class="text-lg max-w-2xl mb-14" style="color:var(--text-muted)">A Nomus foi fundada por engenheiros de produção. Nasceu como sistema de controle de produção numa época em que as únicas soluções custavam milhões de dólares e eram feitas para gigantes.</p>
 
     <!-- Stats -->
@@ -511,9 +511,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </iframe>
         </div>
         <div class="p-5">
-          <p class="text-sm leading-relaxed mb-4 italic" style="color:#94a3b8">"A eficiência e a organização na Policristal tiveram grande evolução desde a implantação do Nomus ERP Industrial."</p>
+          <p class="text-sm leading-relaxed mb-4 italic" style="color:#5e7581">"A eficiência e a organização na Policristal tiveram grande evolução desde a implantação do Nomus ERP Industrial."</p>
           <hr class="line-divider mb-3"/>
-          <p class="text-white font-semibold text-sm">Policristal</p>
+          <p class="text-slate-800 font-semibold text-sm">Policristal</p>
           <p class="text-xs mt-0.5" style="color:var(--blue-light)">Case de sucesso</p>
         </div>
       </div>
@@ -531,9 +531,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </iframe>
         </div>
         <div class="p-5">
-          <p class="text-sm leading-relaxed mb-4 italic" style="color:#94a3b8">"O trabalho em equipe entre gestão e colaboradores da Planoplast com o Nomus ERP trouxe mudanças significativas para os resultados da Plano & Maximold."</p>
+          <p class="text-sm leading-relaxed mb-4 italic" style="color:#5e7581">"O trabalho em equipe entre gestão e colaboradores da Planoplast com o Nomus ERP trouxe mudanças significativas para os resultados da Plano & Maximold."</p>
           <hr class="line-divider mb-3"/>
-          <p class="text-white font-semibold text-sm">Planoplast / Plano & Maximold</p>
+          <p class="text-slate-800 font-semibold text-sm">Planoplast / Plano & Maximold</p>
           <p class="text-xs mt-0.5" style="color:var(--blue-light)">Case de sucesso</p>
         </div>
       </div>
@@ -551,9 +551,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </iframe>
         </div>
         <div class="p-5">
-          <p class="text-sm leading-relaxed mb-4 italic" style="color:#94a3b8">"Agilidade, personalização e objetividade são as palavras-chave da nova realidade da Curifest — gerindo mais de 7 mil tipos de itens sem falhas."</p>
+          <p class="text-sm leading-relaxed mb-4 italic" style="color:#5e7581">"Agilidade, personalização e objetividade são as palavras-chave da nova realidade da Curifest — gerindo mais de 7 mil tipos de itens sem falhas."</p>
           <hr class="line-divider mb-3"/>
-          <p class="text-white font-semibold text-sm">Curifest</p>
+          <p class="text-slate-800 font-semibold text-sm">Curifest</p>
           <p class="text-xs mt-0.5" style="color:var(--blue-light)">Case de sucesso</p>
         </div>
       </div>
@@ -575,45 +575,45 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-14">
       <div class="badge mx-auto mb-4">Método Fábrica Integrada</div>
-      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">Como a Nomus transforma sua indústria em 4 a 6 meses</h2>
+      <h2 class="text-3xl lg:text-4xl font-bold text-slate-800 mb-4 leading-tight">Como a Nomus transforma sua indústria em 4 a 6 meses</h2>
       <p class="text-lg" style="color:var(--text-muted)">O método que já funcionou em mais de 1.100 indústrias brasileiras</p>
     </div>
 
     <div class="grid lg:grid-cols-4 gap-5 mb-12">
 
       <div class="card-dark p-6">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
-          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#0b99d1" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         </div>
         <p class="section-label mb-2">Semana 1–2</p>
-        <h3 class="font-bold text-white mb-2">Diagnóstico e Setup</h3>
+        <h3 class="font-bold text-slate-800 mb-2">Diagnóstico e Setup</h3>
         <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Nosso time conhece seu negócio e organiza a equipe do projeto, determina escopo, etapas, prazos e responsabilidades. Identificação de necessidades e levantamento de dados.</p>
       </div>
 
       <div class="card-dark p-6">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
-          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#0b99d1" stroke-width="2" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
         </div>
         <p class="section-label mb-2">Mês 1–2</p>
-        <h3 class="font-bold text-white mb-2">Conectando as Ilhas</h3>
+        <h3 class="font-bold text-slate-800 mb-2">Conectando as Ilhas</h3>
         <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Cadastros e configurações gerais são feitas de acordo com cronograma e orientações da equipe do cliente. Construindo alicerces para suportar a operação do sistema.</p>
       </div>
 
       <div class="card-dark p-6">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
-          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#0b99d1" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
         </div>
         <p class="section-label mb-2">Mês 2–3</p>
-        <h3 class="font-bold text-white mb-2">Você no Comando</h3>
+        <h3 class="font-bold text-slate-800 mb-2">Você no Comando</h3>
         <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Vendas, faturamento, compras, recebimento, financeiro parametrizados e prontos para serem operados. Gestão administrativa da empresa na palma da sua mão.</p>
       </div>
 
-      <div class="p-6 rounded-2xl" style="background:#043AAA;border:1px solid rgba(77,160,232,0.3)">
+      <div class="p-6 rounded-2xl" style="background:#0b99d1;border:1px solid rgba(11,153,209,0.3)">
         <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(255,255,255,0.15)">
           <svg width="18" height="18" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </div>
-        <p class="text-xs font-bold uppercase tracking-widest mb-2" style="color:rgba(77,160,232,0.9)">Mês 4–6</p>
-        <h3 class="font-bold text-white mb-2">Transformação Completa</h3>
+        <p class="text-xs font-bold uppercase tracking-widest mb-2" style="color:#0b99d1">Mês 4–6</p>
+        <h3 class="font-bold text-slate-800 mb-2">Transformação Completa</h3>
         <p class="text-sm leading-relaxed" style="color:rgba(255,255,255,0.65)">Produção, estoque e dashboards parametrizados e prontos para uso. Movimentações de estoque e produção controladas em tempo real. Principais KPIs monitorados com agilidade.</p>
       </div>
 
@@ -633,73 +633,73 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="py-24 px-6 lg:px-16 section-gradient">
   <div class="max-w-6xl mx-auto">
     <div class="section-label mb-3">O que você leva</div>
-    <h2 class="text-3xl lg:text-4xl font-bold text-white mb-14 leading-tight">Tudo que você recebe quando escolhe a Nomus</h2>
+    <h2 class="text-3xl lg:text-4xl font-bold text-slate-800 mb-14 leading-tight">Tudo que você recebe quando escolhe a Nomus</h2>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
 
       <div class="card-dark p-6">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
-          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#0b99d1" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
         </div>
-        <h3 class="font-bold text-white mb-2 text-sm">ERP Completo para Indústria</h3>
+        <h3 class="font-bold text-slate-800 mb-2 text-sm">ERP Completo para Indústria</h3>
         <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Produção, estoque, comercial, financeiro e fiscal integrados. Feito para PMEs industriais.</p>
       </div>
 
       <div class="card-dark p-6">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
-          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#0b99d1" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
         </div>
-        <h3 class="font-bold text-white mb-2 text-sm">Implantação Especializada</h3>
+        <h3 class="font-bold text-slate-800 mb-2 text-sm">Implantação Especializada</h3>
         <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Time com experiência real de chão de fábrica. Seu implantador já viu seu problema antes.</p>
       </div>
 
       <div class="card-dark p-6">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
-          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#0b99d1" stroke-width="2" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
         </div>
-        <h3 class="font-bold text-white mb-2 text-sm">Nomus Lean — 68h de Treinamento em vídeo</h3>
+        <h3 class="font-bold text-slate-800 mb-2 text-sm">Nomus Lean — 68h de Treinamento em vídeo</h3>
         <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Metodologia em vídeo. Você e a equipe aprendem no próprio ritmo sem parar a produção.</p>
       </div>
 
       <div class="card-dark p-6">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
-          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#0b99d1" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
         </div>
-        <h3 class="font-bold text-white mb-2 text-sm">Dashboard 100% Personalizado</h3>
+        <h3 class="font-bold text-slate-800 mb-2 text-sm">Dashboard 100% Personalizado</h3>
         <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Monte os painéis que fazem sentido para sua fábrica. Acesse de qualquer lugar, sem VPN.</p>
       </div>
 
       <div class="card-dark p-6">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
-          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#0b99d1" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
         </div>
-        <h3 class="font-bold text-white mb-2 text-sm">Suporte que Fala a língua da Indústria</h3>
+        <h3 class="font-bold text-slate-800 mb-2 text-sm">Suporte que Fala a língua da Indústria</h3>
         <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Quando você liga, quem atende entende de PCP, ordem de produção e chão de fábrica.</p>
       </div>
 
       <div class="card-dark p-6">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(4,58,170,0.2);border:1px solid rgba(77,160,232,0.2)">
-          <svg width="18" height="18" fill="none" stroke="#4DA0E8" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.2)">
+          <svg width="18" height="18" fill="none" stroke="#0b99d1" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
         </div>
-        <h3 class="font-bold text-white mb-2 text-sm">Rastreabilidade + Conformidade Fiscal</h3>
+        <h3 class="font-bold text-slate-800 mb-2 text-sm">Rastreabilidade + Conformidade Fiscal</h3>
         <p class="text-xs leading-relaxed" style="color:var(--text-muted)">Reforma tributária resolvida e o caminho aberto para ISO 9001, Anvisa etc. Nunca mais perca contrato por falta de certificação.</p>
       </div>
 
     </div>
 
     <!-- Bonus -->
-    <div class="rounded-2xl p-8 lg:p-10 flex flex-col lg:flex-row items-start lg:items-center gap-6 justify-between" style="background:#043AAA;border:1px solid rgba(77,160,232,0.25)">
+    <div class="rounded-2xl p-8 lg:p-10 flex flex-col lg:flex-row items-start lg:items-center gap-6 justify-between" style="background:#0b99d1;border:1px solid rgba(11,153,209,0.25)">
       <div class="flex items-start gap-5">
         <div class="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 text-3xl" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15)">
           🎁
         </div>
         <div>
-          <p class="section-label mb-2" style="color:rgba(77,160,232,0.9)">Bônus exclusivo</p>
-          <h3 class="text-xl font-bold text-white mb-2">Diagnóstico Gratuito da sua Operação Industrial</h3>
+          <p class="section-label mb-2" style="color:#0b99d1">Bônus exclusivo</p>
+          <h3 class="text-xl font-bold text-slate-800 mb-2">Diagnóstico Gratuito da sua Operação Industrial</h3>
           <p class="text-sm leading-relaxed max-w-xl" style="color:rgba(255,255,255,0.65)">Ao falar com um especialista Nomus, você recebe gratuitamente uma reunião de diagnóstico onde nosso time analisa como está a operação da sua indústria hoje — gargalos, pontos de melhoria e um plano personalizado de como um ERP industrial pode transformar sua gestão. Sem compromisso. Sem custo.</p>
         </div>
       </div>
-      <a href="#cta-final" class="shrink-0 inline-flex items-center gap-2 bg-white font-bold text-sm px-7 py-3.5 rounded-full shadow-xl whitespace-nowrap hover:bg-blue-50 transition-colors" style="color:#043AAA">
+      <a href="#cta-final" class="shrink-0 inline-flex items-center gap-2 bg-white font-bold text-sm px-7 py-3.5 rounded-full shadow-xl whitespace-nowrap hover:bg-blue-50 transition-colors" style="color:#0b99d1">
         Quero meu diagnóstico gratuito →
       </a>
     </div>
@@ -714,14 +714,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="max-w-3xl mx-auto">
     <div class="text-center mb-12">
       <div class="badge mx-auto mb-4">FAQ</div>
-      <h2 class="text-3xl lg:text-4xl font-bold text-white leading-tight">Perguntas que todo dono de fábrica faz antes de decidir</h2>
+      <h2 class="text-3xl lg:text-4xl font-bold text-slate-800 leading-tight">Perguntas que todo dono de fábrica faz antes de decidir</h2>
     </div>
 
     <div>
       <div class="faq-item py-5 cursor-pointer" style="border-bottom:1px solid var(--border)" onclick="toggleFaq(this)">
         <div class="flex items-center justify-between gap-4">
-          <h3 class="font-semibold text-white">Quanto tempo leva para o sistema estar funcionando?</h3>
-          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-lg font-light" style="background:rgba(255,255,255,0.07);border:1px solid var(--border-mid)">+</div>
+          <h3 class="font-semibold text-slate-800">Quanto tempo leva para o sistema estar funcionando?</h3>
+          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-slate-600 text-lg font-light" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.25)">+</div>
         </div>
         <div class="faq-answer pt-3">
           <p class="text-sm leading-relaxed" style="color:var(--text-muted)">As primeiras funcionalidades entram em operação nas primeiras semanas. A transformação completa acontece em 4 a 6 meses. Empresas que engajam a equipe desde o início chegam lá em 2 meses.</p>
@@ -730,8 +730,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <div class="faq-item py-5 cursor-pointer" style="border-bottom:1px solid var(--border)" onclick="toggleFaq(this)">
         <div class="flex items-center justify-between gap-4">
-          <h3 class="font-semibold text-white">Preciso parar a produção para implantar?</h3>
-          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-lg font-light" style="background:rgba(255,255,255,0.07);border:1px solid var(--border-mid)">+</div>
+          <h3 class="font-semibold text-slate-800">Preciso parar a produção para implantar?</h3>
+          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-slate-600 text-lg font-light" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.25)">+</div>
         </div>
         <div class="faq-answer pt-3">
           <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Não. A implantação acontece em paralelo com a operação. Você continua produzindo enquanto o sistema vai sendo configurado e a equipe vai sendo treinada.</p>
@@ -740,8 +740,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <div class="faq-item py-5 cursor-pointer" style="border-bottom:1px solid var(--border)" onclick="toggleFaq(this)">
         <div class="flex items-center justify-between gap-4">
-          <h3 class="font-semibold text-white">E se minha equipe não adotar o sistema?</h3>
-          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-lg font-light" style="background:rgba(255,255,255,0.07);border:1px solid var(--border-mid)">+</div>
+          <h3 class="font-semibold text-slate-800">E se minha equipe não adotar o sistema?</h3>
+          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-slate-600 text-lg font-light" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.25)">+</div>
         </div>
         <div class="faq-answer pt-3">
           <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Esse é o medo mais comum e o menos realizado na prática. Nosso time tem experiência em centenas de fábricas. Quando o time vê que o sistema facilita o trabalho deles, a resistência some.</p>
@@ -750,8 +750,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <div class="faq-item py-5 cursor-pointer" style="border-bottom:1px solid var(--border)" onclick="toggleFaq(this)">
         <div class="flex items-center justify-between gap-4">
-          <h3 class="font-semibold text-white">A Nomus funciona para o tamanho da minha empresa?</h3>
-          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-lg font-light" style="background:rgba(255,255,255,0.07);border:1px solid var(--border-mid)">+</div>
+          <h3 class="font-semibold text-slate-800">A Nomus funciona para o tamanho da minha empresa?</h3>
+          <div class="faq-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-slate-600 text-lg font-light" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.25)">+</div>
         </div>
         <div class="faq-answer pt-3">
           <p class="text-sm leading-relaxed" style="color:var(--text-muted)">Se sua indústria fatura entre R$ 1,8 milhão e R$ 100 milhões, a Nomus foi feita para você. Somos o ERP que cresce junto com a sua fábrica, sem precisar trocar de sistema quando você chegar no próximo nível.</p>
@@ -767,36 +767,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section id="cta-final" class="py-24 px-6 lg:px-16 relative overflow-hidden" style="background:var(--bg-surface)">
 
   <!-- Background glow -->
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] pointer-events-none opacity-15" style="background:radial-gradient(ellipse at center, #043AAA 0%, transparent 70%); filter:blur(100px);"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] pointer-events-none opacity-15" style="background:radial-gradient(ellipse at center, #0b99d1 0%, transparent 70%); filter:blur(100px);"></div>
 
   <div class="max-w-3xl mx-auto text-center relative z-10">
-    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest rounded-full px-3 py-1.5 mb-8" style="background:rgba(4,58,170,0.15);border:1px solid rgba(77,160,232,0.2);color:#4DA0E8">
+    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest rounded-full px-3 py-1.5 mb-8" style="background:rgba(11,153,209,0.1);border:1px solid rgba(11,153,209,0.25);color:#0b99d1">
       <span class="badge-dot"></span> Vagas limitadas para implantação este mês
     </div>
-    <h2 class="text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight">Sua fábrica está crescendo.<br/>Sua gestão precisa crescer junto.</h2>
+    <h2 class="text-4xl lg:text-5xl font-bold text-slate-800 mb-5 leading-tight">Sua fábrica está crescendo.<br/>Sua gestão precisa crescer junto.</h2>
     <p class="text-lg mb-10" style="color:var(--text-muted)">Cada mês sem controle é um mês entregando atrasado, precificando errado e perdendo para o concorrente que já digitalizou.</p>
 
     <div class="card-dark-mid p-8 mb-8 text-left">
       <div class="section-label mb-1">Diagnóstico gratuito incluso</div>
-      <h3 class="text-lg font-bold text-white mb-1">Fale com um especialista em ERP para indústrias</h3>
+      <h3 class="text-lg font-bold text-slate-800 mb-1">Fale com um especialista em ERP para indústrias</h3>
       <p class="text-sm mb-6" style="color:var(--text-muted)">Um especialista entra em contato em até 24h.</p>
 
       <form id="nomus-form-cta" novalidate>
         <div class="grid sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Nome <span style="color:#4DA0E8">*</span></label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nome <span style="color:#0b99d1">*</span></label>
             <input type="text" name="nome" placeholder="Seu nome completo" required class="form-input-dark"/>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Email <span style="color:#4DA0E8">*</span></label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Email <span style="color:#0b99d1">*</span></label>
             <input type="email" name="email" placeholder="seu@email.com.br" required class="form-input-dark"/>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Empresa <span style="color:#4DA0E8">*</span></label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Empresa <span style="color:#0b99d1">*</span></label>
             <input type="text" name="empresa" placeholder="Nome da sua empresa" required class="form-input-dark"/>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Seu cargo <span style="color:#4DA0E8">*</span></label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Seu cargo <span style="color:#0b99d1">*</span></label>
             <div class="relative">
               <select name="cargo" required class="form-input-dark pr-9">
                 <option value="" disabled selected>Selecione</option>
@@ -814,7 +814,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <div class="grid sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Setor da sua empresa <span style="color:#4DA0E8">*</span></label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Setor da sua empresa <span style="color:#0b99d1">*</span></label>
             <div class="relative">
               <select name="setor" required class="form-input-dark pr-9">
                 <option value="" disabled selected>Selecione</option>
@@ -838,7 +838,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Telefone <span style="color:#4DA0E8">*</span></label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Telefone <span style="color:#0b99d1">*</span></label>
             <input type="tel" name="telefone" id="tel2" placeholder="(00) 00000-0000" required class="form-input-dark"/>
           </div>
         </div>
