@@ -340,7 +340,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               ✓ Recebemos sua solicitação! Um especialista entrará em contato em breve.
             </div>
 
-            <button type="submit" class="btn-primary w-full justify-center text-sm py-3.5">
+            <button type="button" onclick="validateForm('nomus-form','form-error','form-success')" class="btn-primary w-full justify-center text-sm py-3.5">
               Falar com especialista →
             </button>
 
@@ -842,7 +842,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div id="cta-form-success" class="hidden mb-4 rounded-lg px-4 py-3 text-xs" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#4ade80">
           ✓ Recebemos sua solicitação! Um especialista entrará em contato em breve.
         </div>
-        <button type="submit" class="btn-primary w-full justify-center text-sm py-4">
+        <button type="button" onclick="validateForm('nomus-form-cta','cta-form-error','cta-form-success')" class="btn-primary w-full justify-center text-sm py-4">
           Quero meu diagnóstico gratuito →
         </button>
         <p class="text-xs text-center mt-3" style="color:var(--text-dim)">🔒 Sem compromisso. Um especialista entra em contato em até 24 horas.</p>
@@ -908,60 +908,65 @@ if (tel2) applyMask(tel2);
 
 // Form validation + GTM push
 function validateForm(formId, errorId, successId) {
-  var form = document.getElementById(formId);
-  if (!form) return;
+  var form    = document.getElementById(formId);
+  var error   = document.getElementById(errorId);
+  var success = document.getElementById(successId);
+  if (!form || !error || !success) return;
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
+  error.classList.add('hidden');
+  success.classList.add('hidden');
 
-    var error   = document.getElementById(errorId);
-    var success = document.getElementById(successId);
-    error.classList.add('hidden');
+  // Validação dos campos obrigatórios — ANTES de qualquer evento
+  var valid = true;
+  form.querySelectorAll('[required]').forEach(function(f) {
+    f.style.borderColor = '';
+    if (!f.value.trim()) {
+      valid = false;
+      f.style.borderColor = '#ef4444';
+    }
+  });
+  if (!valid) { error.classList.remove('hidden'); return; }
 
-    // Validação dos campos obrigatórios
-    var valid = true;
-    form.querySelectorAll('[required]').forEach(function(f) {
-      f.style.borderColor = '';
-      if (!f.value.trim()) {
-        valid = false;
-        f.style.borderColor = '#ef4444';
-      }
-    });
-    if (!valid) { error.classList.remove('hidden'); return; }
+  // Validação de e-mail
+  var emailField = form.querySelector('[name="email"]');
+  if (emailField && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value.trim())) {
+    emailField.style.borderColor = '#ef4444';
+    error.classList.remove('hidden');
+    return;
+  }
 
-    // Coleta via FormData (método mais robusto)
-    var fd        = new FormData(form);
-    var nome      = (fd.get('nome')      || '').trim();
-    var email     = (fd.get('email')     || '').trim();
-    var telefone  = (fd.get('telefone')  || '').trim();
-    var empresa   = (fd.get('empresa')   || '').trim();
-    var cargo     = (fd.get('cargo')     || '').trim();
-    var setor     = (fd.get('setor')     || '').trim();
+  // Coleta via FormData (método mais robusto)
+  var fd        = new FormData(form);
+  var nome      = (fd.get('nome')      || '').trim();
+  var email     = (fd.get('email')     || '').trim();
+  var telefone  = (fd.get('telefone')  || '').trim();
+  var empresa   = (fd.get('empresa')   || '').trim();
+  var cargo     = (fd.get('cargo')     || '').trim();
+  var setor     = (fd.get('setor')     || '').trim();
 
-    var partes    = nome.split(/\s+/);
-    var firstName = partes[0] || '';
-    var lastName  = partes.slice(1).join(' ') || '';
+  var partes    = nome.split(/\s+/);
+  var firstName = partes[0] || '';
+  var lastName  = partes.slice(1).join(' ') || '';
 
-    // Seta no window para GTM JS Variables lerem
-    window['user-js-firstname'] = firstName;
-    window['user-js-lastname']  = lastName;
-    window['user-js-email']     = email;
-    window['user-js-phone']     = telefone;
-    window['user-js-cargo']     = cargo;
+  // Seta no window para GTM JS Variables lerem
+  window['user-js-firstname'] = firstName;
+  window['user-js-lastname']  = lastName;
+  window['user-js-email']     = email;
+  window['user-js-phone']     = telefone;
+  window['user-js-cargo']     = cargo;
 
-    // Push para o dataLayer do GTM
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event: 'form_submit_nomus' });
-    window.dataLayer.push({
-      event:               'form_submit_nomus',
-      'user-js-firstname': firstName,
-      'user-js-lastname':  lastName,
-      'user-js-email':     email,
-      'user-js-phone':     telefone,
-      'user-js-cargo':     cargo,
-      formEmpresa:         empresa,
-      formSetor:           setor
-    });
+  // Push único para o dataLayer — só dispara após validação completa
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event:               'form_submit_nomus',
+    'user-js-firstname': firstName,
+    'user-js-lastname':  lastName,
+    'user-js-email':     email,
+    'user-js-phone':     telefone,
+    'user-js-cargo':     cargo,
+    formEmpresa:         empresa,
+    formSetor:           setor
+  });
 
     // Coleta UTMs dos campos ocultos
     var utmSource   = (fd.get('utm_source')   || '').trim();
@@ -1007,11 +1012,9 @@ function validateForm(formId, errorId, successId) {
 
     success.classList.remove('hidden');
     form.reset();
-  });
 }
 
-validateForm('nomus-form',     'form-error',     'form-success');
-validateForm('nomus-form-cta', 'cta-form-error', 'cta-form-success');
+// Não há mais listeners de 'submit' — os botões chamam validateForm() diretamente via onclick
 </script>
 
 
