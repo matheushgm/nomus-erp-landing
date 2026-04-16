@@ -1012,6 +1012,9 @@ function validateForm(formId, errorId, successId) {
 
     success.classList.remove('hidden');
     form.reset();
+    setTimeout(function() {
+      window.location.href = 'https://www.nomus.com.br/erpindustrial/demonstracao-nomus-erp-industrial/';
+    }, 800);
 }
 
 // Não há mais listeners de 'submit' — os botões chamam validateForm() diretamente via onclick
