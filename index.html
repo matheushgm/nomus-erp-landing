@@ -935,6 +935,10 @@ function validateForm(formId, errorId, successId) {
     return;
   }
 
+  // Evita lead e conversão em dobro com clique duplo (o redirect leva 800 ms)
+  if (form.dataset.enviado === '1') return;
+  form.dataset.enviado = '1';
+
   // Coleta via FormData (método mais robusto)
   var fd        = new FormData(form);
   var nome      = (fd.get('nome')      || '').trim();
@@ -967,6 +971,20 @@ function validateForm(formId, errorId, successId) {
     formEmpresa:         empresa,
     formSetor:           setor
   });
+
+  /* Conversão explícita: o GTM da Nomus só converte em envio nativo de formulário
+     (que esta LP evita de propósito) e não tem gatilho para form_submit_nomus.
+     Por isso o Lead do pixel e o evento do GA4 saem daqui, depois da validação. */
+  try {
+    if (typeof window.fbq === 'function') {
+      window.fbq('trackSingle', '253105283232348', 'Lead', { content_name: 'lp-erp-industrial', content_category: 'demonstracao' });
+    }
+  } catch (err) { console.warn('[Nomus] Pixel error:', err); }
+  try {
+    (function(){ window.dataLayer.push(arguments); })('event', 'generate_lead', {
+      send_to: 'G-KHSX2Q665P', material: 'lp-erp-industrial', lead_source: 'lp_principal'
+    });
+  } catch (err) { console.warn('[Nomus] GA4 error:', err); }
 
     // Coleta UTMs dos campos ocultos
     var utmSource   = (fd.get('utm_source')   || '').trim();
