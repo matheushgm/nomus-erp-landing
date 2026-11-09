@@ -906,6 +906,37 @@ const tel2 = document.getElementById('tel2');
 if (tel1) applyMask(tel1);
 if (tel2) applyMask(tel2);
 
+/* Envio nativo do formulário, só depois da validação. É ele que aciona os gatilhos padrão de
+   "Envio de formulário" do GTM da Nomus: a tag "Meta ads - Lead" (Lead padrão do pixel) e o
+   "Acionamento coleta do usuário" (GA4 Enhanced Conversion, conversão do Google Ads).
+   As variáveis desse GTM leem o primeiro input[type=email] da página, #custom_fields_39402
+   (cargo) e #custom_fields_9843 (setor), IDs do formulário do RD. Os espelhos ocultos abaixo
+   entregam esses valores para os filtros de qualificação funcionarem aqui também.
+   O listener de submit de cada formulário segura a navegação. */
+function nomusEnvioNativo(form, dados) {
+  try {
+    var espelhos = { email: 'nomus-gtm-email', cargo: 'custom_fields_39402', setor: 'custom_fields_9843' };
+    Object.keys(espelhos).forEach(function (k) {
+      var el = document.getElementById(espelhos[k]);
+      if (!el) {
+        el = document.createElement('input');
+        el.id = espelhos[k];
+        el.type = k === 'email' ? 'email' : 'text';
+        el.hidden = true; el.tabIndex = -1; el.setAttribute('aria-hidden', 'true');
+        document.body.insertBefore(el, document.body.firstChild);
+      }
+      el.value = dados[k] || '';
+    });
+    if (typeof form.requestSubmit === 'function') form.requestSubmit();
+    else form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+  } catch (err) { console.warn('[Nomus] Envio nativo:', err); }
+}
+
+['nomus-form', 'nomus-form-cta'].forEach(function (id) {
+  var f = document.getElementById(id);
+  if (f) f.addEventListener('submit', function (e) { e.preventDefault(); });
+});
+
 // Form validation + GTM push
 function validateForm(formId, errorId, successId) {
   var form    = document.getElementById(formId);
@@ -972,19 +1003,7 @@ function validateForm(formId, errorId, successId) {
     formSetor:           setor
   });
 
-  /* Conversão explícita: o GTM da Nomus só converte em envio nativo de formulário
-     (que esta LP evita de propósito) e não tem gatilho para form_submit_nomus.
-     Por isso o Lead do pixel e o evento do GA4 saem daqui, depois da validação. */
-  try {
-    if (typeof window.fbq === 'function') {
-      window.fbq('trackSingle', '253105283232348', 'Lead', { content_name: 'lp-erp-industrial', content_category: 'demonstracao' });
-    }
-  } catch (err) { console.warn('[Nomus] Pixel error:', err); }
-  try {
-    (function(){ window.dataLayer.push(arguments); })('event', 'generate_lead', {
-      send_to: 'G-KHSX2Q665P', material: 'lp-erp-industrial', lead_source: 'lp_principal'
-    });
-  } catch (err) { console.warn('[Nomus] GA4 error:', err); }
+  nomusEnvioNativo(form, { email: email, cargo: cargo, setor: setor });
 
     // Coleta UTMs dos campos ocultos
     var utmSource   = (fd.get('utm_source')   || '').trim();
@@ -1035,7 +1054,7 @@ function validateForm(formId, errorId, successId) {
     }, 800);
 }
 
-// Não há mais listeners de 'submit' — os botões chamam validateForm() diretamente via onclick
+// Os botões chamam validateForm() via onclick; o único envio nativo sai de nomusEnvioNativo(), depois da validação
 </script>
 
 
